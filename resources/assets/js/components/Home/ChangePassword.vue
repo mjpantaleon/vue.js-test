@@ -1,26 +1,26 @@
 <template>
   <div class="row">
-      <div class="col-lg-8">
-          <div class="panel panel-primary">
+      <div class="col-lg-6 col-lg-offset-3">
+          <div class="panel panel-success">
               <div class="panel-heading">Change Password</div>
               <div class="panel-body form-horizontal" v-if="!done">
                   <div class="form-group"><label for="" class="control-label col-lg-4">Old Password</label>
                     <div class="col-lg-8">
-                        <input type="password" class="form-control"  v-model="oldpassword">
+                        <input type="password" class="form-control input-sm"  v-model="oldpassword">
                     </div>
                   </div>
 
                   <div class="form-group"><label for="" class="control-label col-lg-4">New Password</label>
-                    <div class="col-lg-8"><input type="password" class="form-control"  v-model="newpassword"></div>
+                    <div class="col-lg-8"><input type="password" class="form-control input-sm"  v-model="newpassword"></div>
                   </div>
 
                   <div class="form-group"><label for="" class="control-label col-lg-4">Re-type New Password</label>
-                    <div class="col-lg-8"><input type="password" class="form-control"  v-model="confirm"></div>
+                    <div class="col-lg-8"><input type="password" class="form-control input-sm"  v-model="confirm"></div>
                   </div>
 
                   <div class="form-group">
                       <div class="col-lg-8 col-lg-offset-4">
-                          <a href="#" class="btn btn-success" :disabled="!formok" @click.prevent="changePassword">Change Password</a>
+                          <a href="#" class="btn btn-default btn-sm" :disabled="!formok" @click.prevent="changePassword">Change Password</a>
                           <div v-if="loading" >
                               <br/>
                               <loading label="Saving, please wait.."></loading>
@@ -89,3 +89,17 @@ export default {
     }
 }
 </script>
+<style scoped>
+.control-label {
+    margin-top:-.5em;
+    font-size: 14px;
+}
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+.error {
+    font-size:12px;
+    margin-top:0.5em;
+}
+</style>

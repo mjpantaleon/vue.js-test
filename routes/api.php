@@ -26,11 +26,20 @@ Route::middleware('client')->group(function(){
 
     Route::post('mbd', 'MBDController@search');
     Route::get('mbd/info/{sched_id}', 'MBDController@info');
+    Route::get('mbd/donations/{sched_id}', 'MBDController@donations');
     Route::get('mbd/shortinfo/{sched_id}', 'MBDController@shortInfo');
     Route::post('mbd/create', 'MBDController@create');
+    Route::post('mbd/addDonor', 'DonationController@mbdNewDonor');
+    Route::post('mbd/assignDonor', 'DonationController@mbdAssignDonor');
+    Route::post('mbd/donationRemove', 'DonationController@donationRemove');
 
     Route::post('donors', 'DonorController@search');
+    Route::post('donor/create', 'DonorController@create');
+    Route::post('donor/update', 'DonorController@update');
     Route::get('donor/{seqno}', 'DonorController@info');
+    Route::get('donor/{seqno}/photo', 'DonorController@photo');
+    Route::post('walkin/create', 'DonationController@newWalkIn');
+    Route::post('walkin', 'DonationController@walkin');
     
 });
 
@@ -42,6 +51,12 @@ Route::middleware('client')->group(function(){
 
     Route::get('keyvalues','KeyValueController@keyvalues');
     Route::get('keyvalues/nations','KeyValueController@nations');
+    Route::get('keyvalues/donationtypes','KeyValueController@donationtypes');
+    Route::get('keyvalues/donorstatuses','KeyValueController@donorstatuses');
+    Route::get('keyvalues/collectionmethods','KeyValueController@collectionmethods');
+    Route::get('keyvalues/collectionstatuses','KeyValueController@collectionstatuses');
+
+    Route::get('dhq/questions','DHQController@questions');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

@@ -41,7 +41,7 @@
 <script>
 
 export default {
-  props : ['defaults'],
+  props : ['defs'],
   data(){
       return {
           prefix : null,
@@ -49,25 +49,16 @@ export default {
           regions : [], provinces : [], cities : [], barangays : []
       }
   },
-  computed : {
-      headers(){
-          return {
-              headers : {
-                    Authorization : this.$store.state.token.access_token,
-                }
-          };
-      },
-  },
   mounted(){
-      if(this.defaults.prefix){
-          this.prefix = this.defaults.prefix;
-      }
-      let {region,province,city,barangay} = this.defaults;
-      this.fetchRegion();
-      this.region = region;
-      this.province = province;
-      this.city = city;
-      this.barangay = barangay;
+    if(this.defs){
+        let {region,province,city,barangay,prefix} = this.defs;
+        this.fetchRegion();
+        this.region = region;
+        this.province = province;
+        this.city = city;
+        this.barangay = barangay;
+        this.prefix = prefix;
+    }
   },
   methods : {
       fetchRegion(){
@@ -85,6 +76,17 @@ export default {
       }
   },
   watch : {
+      defs(){
+          if(this.defs){
+                let {region,province,city,barangay,prefix} = this.defs;
+                this.fetchRegion();
+                this.region = region;
+                this.province = province;
+                this.city = city;
+                this.barangay = barangay;
+                this.prefix = prefix;
+            }
+      },
       region(){
           let {headers} = this;
           this.cities = []; this.barangays = [];

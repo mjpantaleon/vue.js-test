@@ -4,32 +4,11 @@
         <div class="col-lg-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    MBD Details
-                    <router-link :to="('../')" class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
-                </div>
-                <table class="table table-condensed table-bordered">
-                    <tbody>
-                        <tr>
-                            <th class="col-lg-4">Agency</th>
-                            <td>{{mbd.agency_name}}</td>
-                        </tr>
-                        <tr>
-                            <th class="col-lg-4">Date</th>
-                            <td>{{mbd.donation_dt.substr(0,10)}}</td>
-                        </tr>
-                        <tr v-if="donation_id">
-                            <td>Donation ID</td>
-                            <td>{{donation_id}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="panel panel-success">
-                <div class="panel-heading">
                     <span class="glyphicon glyphicon-user"></span> Add New Donor
+                    <router-link :to="('./../Verifier')" class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
                 </div>
                 <div class="panel-body form-horizontal">
-                    <!-- <donor-pic-capture @oncomplete="setPhoto"></donor-pic-capture> -->
+                    <donor-pic-capture @oncomplete="setPhoto"></donor-pic-capture>
                     <div class="form-group required">
                         <label for="" class="control-label col-lg-3">First Name</label>
                         <div class="col-lg-9"><input v-validate="'required'" type="text" class="form-control input-sm" v-model="fname" name="First Name"></div>
@@ -115,10 +94,10 @@
 
 <script>
 import { Validator } from 'vee-validate';
-import loading from "./../../Loading.vue";
-import filters from "./../../../filters";
-import DonorPicCapture from './create/DonorPhoto.vue';
-import DonorAddresses from './create/DonorAddresses.vue';
+import loading from "./../Loading.vue";
+import filters from "./../../filters";
+import DonorPicCapture from './selector/create/DonorPhoto.vue';
+import DonorAddresses from './selector/create/DonorAddresses.vue';
 
 const validator = new Validator({
                     fname: 'required',
@@ -130,11 +109,9 @@ const validator = new Validator({
 export default {
   filters,
   components : {loading,DonorPicCapture,DonorAddresses},
-  props : ['sched_id'],
   data(){
       return { 
-          donation_id : null,
-          mbd: null,loading : true, donor_photo : null, nations : [],
+          loading : true, donor_photo : null, nations : [],
           fname : null, mname : null, lname : null, name_suffix : null, gender : null, bdate : null, civil_stat : null, 
           tel_no : null, mobile_no : null, email : null, 
           home : null, office : null,
@@ -142,26 +119,14 @@ export default {
       };
   },
   mounted(){
-      let {currentRoute : {query : {donation_id}}} = this.$router;
-      if(donation_id != null && donation_id != undefined && donation_id != "undefined"){
-          this.donation_id = donation_id;
-      }
       this.fname = this.$store.state.MBD.donor_search.fname;
       this.mname = this.$store.state.MBD.donor_search.mname;
       this.lname = this.$store.state.MBD.donor_search.lname;
 
-      this.$http.get(this,"mbd/shortinfo/"+this.sched_id)
-      .then(({data}) => {
-          this.mbd = data;
-          this.loading = false;
-      })
-      .catch(error => {
-          this.$store.state.error = error;
-      });
-
       this.$http.get(this,"keyvalues/nations")
       .then(({data}) => {
           this.nations = _.orderBy(data,['nation']);
+          this.loading = false;
       })
       .catch(error => {
           this.$store.state.error = error;
@@ -212,7 +177,7 @@ export default {
                 this.$store.state.msg = {
                     type : 'success', content : 'Donor has been created'
                 };
-                this.$router.replace(data.seqno+"?donation_id="+this.donation_id);
+                this.$router.replace(data.seqno);
             })
             .catch(error=>{
                 this.$store.state.error = error;

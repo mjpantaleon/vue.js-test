@@ -5,7 +5,7 @@
             <div class="panel panel-success">
                 <div class="panel-heading">
                     MBD Details
-                    <router-link :to="('../')" class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
+                    <router-link :to="('../../SearchDonor?donation_id='+donation_id)" class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
                 </div>
                 <table class="table table-condensed table-bordered">
                     <tbody>
@@ -26,10 +26,10 @@
             </div>
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <span class="glyphicon glyphicon-user"></span> Add New Donor
+                    <span class="glyphicon glyphicon-user"></span> Update Donor
                 </div>
                 <div class="panel-body form-horizontal">
-                    <!-- <donor-pic-capture @oncomplete="setPhoto"></donor-pic-capture> -->
+                    <donor-pic-capture @oncomplete="setPhoto"></donor-pic-capture>
                     <div class="form-group required">
                         <label for="" class="control-label col-lg-3">First Name</label>
                         <div class="col-lg-9"><input v-validate="'required'" type="text" class="form-control input-sm" v-model="fname" name="First Name"></div>
@@ -97,12 +97,12 @@
                         <li role="presentation"><a href="#office" aria-controls="office" role="tab" data-toggle="tab">Office Address</a></li>
                     </ul>
 
-                    <donor-addresses @home="setHome" @office="setOffice"></donor-addresses>
+                    <donor-addresses v-if="donor" @home="setHome" @office="setOffice" :donor="donor"></donor-addresses>
                     <!-- div.form-group.required>label.control-label.col-lg-3+div.col-lg-9>input.form-control.input-sm -->
                     
                 </div>
                 <div class="panel-footer">
-                    <button class="btn btn-default btn-sm" @click.prevent="save">Add Donor</button>
+                    <button class="btn btn-default btn-sm" @click.prevent="save">Update Donor</button>
                 </div>
             </div>
 
@@ -130,25 +130,67 @@ const validator = new Validator({
 export default {
   filters,
   components : {loading,DonorPicCapture,DonorAddresses},
-  props : ['sched_id'],
+  props : ['sched_id','seqno'],
   data(){
-      return { 
-          donation_id : null,
+      let {currentRoute : {query : {donation_id}}} = this.$router;
+      if(donation_id == null || donation_id == undefined || donation_id == 'null' || donation_id == 'undefined'){
+          donation_id = null;
+      }
+      return {
+          donation_id , 
           mbd: null,loading : true, donor_photo : null, nations : [],
           fname : null, mname : null, lname : null, name_suffix : null, gender : null, bdate : null, civil_stat : null, 
           tel_no : null, mobile_no : null, email : null, 
-          home : null, office : null,
+          home : null, office : null, donor : {},
           nationality : 137
       };
   },
   mounted(){
-      let {currentRoute : {query : {donation_id}}} = this.$router;
-      if(donation_id != null && donation_id != undefined && donation_id != "undefined"){
-          this.donation_id = donation_id;
-      }
-      this.fname = this.$store.state.MBD.donor_search.fname;
-      this.mname = this.$store.state.MBD.donor_search.mname;
-      this.lname = this.$store.state.MBD.donor_search.lname;
+      this.loading = true;
+      this.$http.get(this,'donor/'+this.seqno)
+      .then(({data}) => {
+          let {
+              fname,mname,lname,name_suffix,gender,bdate,civil_stat,
+              nationality,tel_no,mobile_no,email,
+              home_region,home_prov,home_citymun,home_brgy,home_no_st_blk,home_zip,
+              office_region,office_prov,office_citymun,office_brgy,office_no_st_blk,office_zip,
+              } = data;
+          this.fname = fname;
+          this.mname = mname;
+          this.lname = lname;
+          this.name_suffix = name_suffix;
+          this.gender = gender;
+          this.bdate = bdate;
+          this.civil_stat = civil_stat;
+          this.nationality = nationality;
+          this.tel_no = tel_no;
+          this.mobile_no = mobile_no;
+          this.email = email;
+          this.home = {
+              region : home_region,
+              province : home_prov,
+              city : home_citymun,
+              barangay : home_brgy,
+              zip : home_zip,
+              no_st_blk : home_no_st_blk,
+              prefix : 'Home '
+          };
+          this.office = {
+              region : office_region,
+              province : office_prov,
+              city : office_citymun,
+              barangay : office_brgy,
+              zip : office_zip,
+              no_st_blk : office_no_st_blk,
+              prefix : 'Office '
+          };
+          this.donor = {
+              home : this.home,office : this.office
+          }
+      })
+      .catch(error => {
+          this.$store.state.error = error;
+      });
 
       this.$http.get(this,"mbd/shortinfo/"+this.sched_id)
       .then(({data}) => {
@@ -201,8 +243,9 @@ export default {
             
             let {donor_photo, seqno, donor_id, name_suffix, lname, fname, mname, bdate, gender, 
             civil_stat, tel_no, mobile_no, email, nationality, home, office} = this;
+            
             let {facility_cd,user_id} = this.$session.get("user");
-            this.$http.post(this,"donor/create",{
+            this.$http.post(this,"donor/update",{
                 donor_photo, seqno, donor_id, name_suffix, lname, fname, mname, bdate, gender, 
                 civil_stat, tel_no, mobile_no, email, nationality, home, office, 
                 facility_cd, user_id
@@ -210,9 +253,9 @@ export default {
             .then(({data}) => {
                 this.loading = false;
                 this.$store.state.msg = {
-                    type : 'success', content : 'Donor has been created'
+                    type : 'success', content : 'Donor has been updated'
                 };
-                this.$router.replace(data.seqno+"?donation_id="+this.donation_id);
+                this.$router.replace('../'+data.seqno+"?donation_id="+this.donation_id);
             })
             .catch(error=>{
                 this.$store.state.error = error;

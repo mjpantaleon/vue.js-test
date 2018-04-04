@@ -2,16 +2,16 @@
   <div>
       <div class="row">
         <div class="col-lg-12">
-          <div class="panel panel-primary">
+          <div class="panel panel-success">
             <div class="panel-heading">
               Manage Agency
             </div>
             <div class="panel-body">
-              <router-link to="/Agency/create" class="btn btn-success">New Agency</router-link>
+              <router-link to="/Agency/create" class="btn btn-default btn-sm">New Agency</router-link>
               <div class="pull-right col-lg-6 form-horizontal">
                 <label class="control-label col-lg-6">Search</label>
                 <div class="col-lg-6">
-                  <input type="text" class="form-control" v-model="search">
+                  <input type="text" class="form-control input-sm" v-model="search">
                 </div>
               </div>
             </div>
@@ -118,11 +118,17 @@ export default {
 }
 </script>
 
-
-<style>
-.vcenter{
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
+<style scoped>
+.control-label {
+    margin-top:-.5em;
+    font-size: 14px;
+}
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+.error {
+    font-size:12px;
+    margin-top:0.5em;
 }
 </style>

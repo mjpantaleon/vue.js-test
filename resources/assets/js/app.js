@@ -5,6 +5,7 @@
  */
 
 import VueSession from 'vue-session';
+import VeeValidate from 'vee-validate';
 import router from './router';
 import store from './store';
 import Datatable from 'vue2-datatable-component';
@@ -17,6 +18,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 Vue.use(VueSession);
+Vue.use(VeeValidate);
 Vue.use(Datatable);
 Vue.use(BootstrapVue);
 Vue.prototype.$http = http;

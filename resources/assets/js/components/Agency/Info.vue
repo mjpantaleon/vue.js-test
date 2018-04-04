@@ -3,14 +3,14 @@
       <loading v-if="loading"></loading>
       <div class="row" v-if="agency">
           <div class="col-lg-8">
-              <div class="panel panel-primary">
+              <div class="panel panel-success">
                   <div class="panel-heading">Agency Details
                       <div class="pull-right">
                         <router-link to="/Agency" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
                         <router-link :to="('/Agency/update/'+agency_cd)" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit</router-link>
                       </div>
                   </div>
-                    <ul class="list-group">
+                    <ul class="list-group" style="font-size:14px;">
                         
                         <li class="list-group-item">
                             <div class="list-group-item-text">

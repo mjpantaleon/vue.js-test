@@ -2,7 +2,7 @@
     <div>
         <div class="row" v-if="!loading && mbd">
             <div class="col-lg-6">
-                <div class="panel panel-default">
+                <div class="panel panel-success">
                     <div class="panel-heading">MBD Details
                         <router-link to="/MBD" class="pull-right btn btn-default btn-xs"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
                     </div>
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="col-lg-12">
-                <donations :donations="mbd.donations" :schedid="mbd.sched_id"></donations>
+                <donations :schedid="mbd.sched_id"></donations>
             </div>
         </div>
         <loading v-if="loading"></loading>

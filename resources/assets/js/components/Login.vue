@@ -61,7 +61,7 @@ export default {
 				.then(({data : {components,bloodtypes,civilstatus}}) => {
 					this.$session.set('components',components);
 					this.$session.set('blood_types',bloodtypes);
-					this.$session.set('civilstatus',civilstatus);
+					this.$session.set('civil_status',civilstatus);
 					this.$session.set("user",data.user);
 					this.$store.commit('USER',data.user);
 				})

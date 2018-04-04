@@ -3,26 +3,26 @@
       <div class="row">
           <loader v-if="loading"></loader>
           <div class="col-lg-8" v-if="!loading">
-              <div class="panel panel-primary">
+              <div class="panel panel-success">
                   <div class="panel-heading">
                       Edit Agency
                       <router-link to="/Agency" class="pull-right btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
                   </div>
                   <div class="panel-body">
                       <form action="" class="form-horizontal">
-                          <div class="form-group">
+                          <div class="form-group required">
                               <label for="" class="control-label col-lg-4">Agency Name</label>
                               <div class="col-lg-8">
                                   <input type="text" class="form-control input-sm" v-model="agency_name">
                               </div>
                           </div>
 
-                          <div class="form-group">
+                          <div class="form-group required">
                               <label for="" class="control-label col-lg-4">Donor Recruitment Officer</label>
                               <div class="col-lg-8"><input type="text" class="form-control input-sm" v-model="owner"></div>
                           </div>
 
-                          <div class="form-group">
+                          <div class="form-group required">
                               <label for="" class="control-label col-lg-4">Contact Person</label>
                               <div class="col-lg-8"><input type="text" class="form-control input-sm" v-model="contact_person"></div>
                           </div>
@@ -62,7 +62,7 @@
 
                           <div class="form-group">
                               <div class="col-lg-8 col-lg-offset-4">
-                                  <button class="btn btn-success" @click.prevent="update">Update Agency</button>
+                                  <button class="btn btn-default btn-sm" @click.prevent="update">Update Agency</button>
                               </div>
                           </div>
 
@@ -136,3 +136,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+.control-label {
+    margin-top:-.5em;
+    font-size: 14px;
+}
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+.error {
+    font-size:12px;
+    margin-top:0.5em;
+}
+</style>

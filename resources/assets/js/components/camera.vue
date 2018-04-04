@@ -3,7 +3,7 @@
       <div class="modal fade" tabindex="-1" role="dialog" id="camera">
           <div class="modal-dialog" role="document">
               <div class="modal-content">
-                  <div class="modal-header bg-primary">
+                  <div class="modal-header" style="background-color:#3e3f3a;color:#fff;">
                       <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <h4 class="modal-title"><span class="glyphicon glyphicon-camera"></span> Take Picture</h4>
                   </div>

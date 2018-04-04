@@ -140,4 +140,8 @@ export default {
   content:"*";
   color:red;
 }
+.error {
+    font-size:12px;
+    margin-top:0.5em;
+}
 </style>

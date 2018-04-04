@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.2",
+    "vee-validate": "^2.0.6",
     "vue-webcam": "^2.0.4",
     "vue2-datatable-component": "^2.2.2"
   }

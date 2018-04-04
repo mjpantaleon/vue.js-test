@@ -2,19 +2,19 @@
   <div>
       <div class="row">
           <div class="col-lg-12">
-              <div class="panel panel-primary table-responsive">
+              <div class="panel panel-success table-responsive">
                   <div class="panel-heading">Search Donor</div>
                   <div class="panel-body form-horizontal">
                     <label for="" class="control-label col-lg-2">Donor Name</label>
                     <div class="col-lg-9">
                         <div class="row">
-                            <div class="col-lg-4"><input type="text" class="form-control" placeholder="First" v-model="fname"></div>
-                            <div class="col-lg-4"><input type="text" class="form-control" placeholder="Middle" v-model="mname"></div>
-                            <div class="col-lg-4"><input type="text" class="form-control" placeholder="Last" v-model="lname"></div>
+                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="First" v-model="fname"></div>
+                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="Middle" v-model="mname"></div>
+                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="Last" v-model="lname"></div>
                         </div>
                     </div>
                     <div class="col-lg-1">
-                        <button class="btn btn-default" @click.prevent="doSearch">Search</button>
+                        <button class="btn btn-default btn-sm" @click.prevent="doSearch">Search</button>
                     </div>
                   </div>
                   <table class="table table-bordered table-hover table-condensed">
@@ -37,7 +37,7 @@
                           <tr v-if="!attempt && !resultloading">
                               <td class="text-center" colspan="11">Search Donor</td>
                           </tr>
-                          <tr v-if="attempt && !donors && !resultloading">
+                          <tr v-if="attempt && donors.length == 0 && !resultloading">
                               <td class="text-center" colspan="11">Donor not Found</td>
                           </tr>
                           <tr v-if="resultloading">
@@ -58,14 +58,14 @@
                               <td>{{(d.barangay ? d.barangay.bgyname : '')}}</td>
                               <td>{{d.home_no_st_blk}}</td>
                               <td nowrap>
-                                  <router-link :to="('donor/'+d.seqno)" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-search"></span></router-link>
-                                  <router-link :to="('donor/'+d.seqno+'/update')" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-pencil"></span></router-link>
+                                  <router-link :to="('./donor/'+d.seqno+'?donation_id='+donation_id)" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-search"></span></router-link>
+                                  <router-link :to="('./donor/'+d.seqno+'/update?donation_id='+donation_id)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-pencil"></span></router-link>
                               </td>
                           </tr>
                       </tbody>
                   </table>
                   <div class="panel-footer">
-                      <router-link to="donor/create" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Donor</router-link>
+                      <router-link :to="'donor/create?donation_id=' + donation_id" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> New Donor</router-link>
                   </div>
               </div>
           </div>
@@ -84,7 +84,11 @@ export default {
   filters,
   data(){
       let {fname,mname,lname} = this.$store.state.MBD.donor_search;
-      return { loading : false, resultloading : false, donors : [], 
+      let {currentRoute : {query : {donation_id}}} = this.$router;
+      if(donation_id == null || donation_id == undefined || donation_id == 'null' || donation_id == 'undefined'){
+          donation_id = null;
+      }
+      return { donation_id, loading : false, resultloading : false, donors : [], 
       fname, mname, lname,
       attempt : 0};
   },
@@ -127,7 +131,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .result-row{
     font-size: 12px;
 }
@@ -136,5 +140,9 @@ export default {
 }
 .result-row:hover{
     background-color: #aabbcc !important;
+}
+.control-label {
+    margin-top:-.5em;
+    font-size: 14px;
 }
 </style>

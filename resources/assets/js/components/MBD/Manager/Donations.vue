@@ -1,7 +1,7 @@
 <template>
-  <div class="panel panel-default">
+  <div class="panel panel-success">
     <div class="panel-heading">
-        <router-link :to="('/MBD/'+schedid+'/AddDonor')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-search"></span> Search Donor</router-link>
+        <router-link :to="('/MBD/'+schedid+'/SearchDonor')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-search"></span> Search Donor</router-link>
         <a href="#" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Update Donation Details</a>
     </div>
     <table class="table table-condensed table-bordered table-striped">
@@ -36,8 +36,8 @@
                 <td>
                     <input type="checkbox" :value="d.seqno" v-model="selected" v-if="!d.processing">
                 </td>
-                <td><button class="btn btn-danger btn-xs" v-if="!d.processing"><span class="glyphicon glyphicon-remove"></span></button></td>
-                <td><button class="btn btn-info btn-xs" v-if="!d.donor"><span class="glyphicon glyphicon-user"></span></button></td>
+                <td><button class="btn btn-danger btn-xs" v-if="!d.processing" @click.prevent="confirmRemove(d.seqno)"><span class="glyphicon glyphicon-remove"></span></button></td>
+                <td><router-link :to="('/MBD/'+schedid+'/SearchDonor?donation_id='+d.donation_id)" class="btn btn-info btn-xs" v-if="!d.donor"><span class="glyphicon glyphicon-user"></span></router-link></td>
                 <td v-if="!d.donor" colspan="3"></td>
                 <td v-if="d.donor">{{d.donor.fname}} {{d.donor.mname}} {{d.donor.lname}}</td>
                 <td v-if="d.donor">{{d.donor.gender | gender}}</td>
@@ -48,19 +48,40 @@
             </tr>
         </tbody>
     </table>
+    <confirm title="Remove donor from MBD?" @proceed="removeDonor"></confirm>
    </div>
 </template>
 
 <script>
+import $ from "jquery";
+import _ from "lodash";
 import filters from './../../../filters';
+import Confirm from './../../Confirm.vue';
+import rowloading from './../../LoadingInline.vue';
 
 export default {
+  components : {Confirm,rowloading},
   filters,
-  props : ['schedid','donations','loading'],
+  props : ['schedid'],
   data(){
       return {
-          selected : []
+          selected : [], donations : [], currentSeqno : null, loading : false
       }
+  },
+  mounted(){
+      this.loading = true;
+      this.$http.get(this,"mbd/donations/"+this.schedid)
+      .then(({data}) => {
+          this.donations = _.orderBy(data,(d) => {
+              if(d.donor){
+                return d.donor.fname;
+              }
+          });
+          this.loading = false;
+      })
+      .catch(error => {
+          this.$store.state.error = error;
+      });
   },
   computed: {
     selectAll: {
@@ -79,6 +100,27 @@ export default {
             this.selected = selected;
         }
     }
+  },
+  methods : {
+      confirmRemove(seqno){
+          this.currentSeqno = seqno;
+          $("#confirmDialog").modal("show");
+      },
+      removeDonor(c){
+          this.$http.post(this,"mbd/donationRemove",{
+              seqno : this.currentSeqno
+          })
+          .then(({data}) => {
+              this.currentSeqno = null;
+              this.donations = _.filter(this.donations,(d) => {
+                  return d.seqno != data;
+              });
+              c();
+          });
+      },
+      assignDonor(donation_id){
+          this.$router.replace("/MBD/"+this.schedid+"/AddDonor/"+donation_id);
+      }
   }
 }
 </script>

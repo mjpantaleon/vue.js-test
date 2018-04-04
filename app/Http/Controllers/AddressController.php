@@ -11,18 +11,26 @@ use App\Barangay;
 class AddressController extends Controller
 {
     function regions(){
-        return Region::pluck('regname','regcode');
+        return $this->replaceNye(Region::pluck('regname','regcode'));
     }
 
     function provinces(Request $request,$regcode){
-        return Province::whereRegcode($regcode)->pluck('provname','provcode');
+        return $this->replaceNye(Province::whereRegcode($regcode)->pluck('provname','provcode'));
     }
 
     function cities(Request $request,$provcode){
-        return City::whereProvcode($provcode)->pluck('cityname','citycode');
+        return $this->replaceNye(City::whereProvcode($provcode)->pluck('cityname','citycode'));
     }
 
     function barangays(Request $request,$citycode){
-        return Barangay::whereCitycode($citycode)->pluck('bgyname','bgycode');
+        return $this->replaceNye(Barangay::whereCitycode($citycode)->pluck('bgyname','bgycode'));
+    }
+
+    function replaceNye($collection){
+        foreach($collection as $i => $item){
+            $collection[$i] = str_replace("??","Ñ",$item);
+            $collection[$i] = str_replace("Â","Ñ",$collection[$i]);
+        }
+        return $collection;
     }
 }

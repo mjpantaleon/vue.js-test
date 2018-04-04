@@ -19,10 +19,10 @@
               </a>
               <ul class="dropdown-menu">
                 <li><router-link to="/Agency">Manage Agency</router-link></li>
-                <li><router-link to="/Verfier">Donor Status Verifier</router-link></li>
-                <li><router-link to="/Donor">Manage Donors</router-link></li>
+                <li><router-link to="/Verifier">Donor Status Verifier</router-link></li>
+                <!-- <li><router-link to="/Verifier">Manage Donors</router-link></li> -->
                 <li><router-link to="/MBD">Mobile Blood Donation</router-link></li>
-                <li><router-link to="/Donation">Walk-in Donation</router-link></li>
+                <li><router-link to="/Walkin">Walk-in Donation</router-link></li>
               </ul>
             </li>
 

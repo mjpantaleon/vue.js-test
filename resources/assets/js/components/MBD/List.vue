@@ -1,18 +1,18 @@
 <template>
   <div class="row">
       <div class="col-lg-8">
-          <div class="panel panel-primary">
+          <div class="panel panel-success">
               <div class="panel-heading">
                   Mobile Blood Donations
               </div>
               <div class="panel-body">
                   <div class="col-lg-4">
-                      <router-link to="/MBD/create" class="btn btn-success">Create MBD</router-link>
+                      <router-link to="/MBD/create" class="btn btn-default btn-sm">Create MBD</router-link>
                   </div>
                   <div class="col-lg-8 form-horizontal">
                       <div class="form-group">
                         <label for="" class="col-lg-6 control-label">Search</label>
-                        <div class="col-lg-6"><input type="text" class="form-control" v-model="search"></div>
+                        <div class="col-lg-6"><input type="text" class="form-control input-sm" v-model="search"></div>
                       </div>
                   </div>
               </div>
@@ -39,8 +39,8 @@
                               <td>{{mbd.agency_name}}</td>
                               <td>{{mbd.donation_dt.substr(0,10)}}</td>
                               <td>
-                                  <router-link :to="('/mbd/manage/' + mbd.sched_id)" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-th-list"></span></router-link>
-                                  <router-link :to="('/mbd/update/' + mbd.sched_id)" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-pencil"></span></router-link>
+                                  <router-link :to="('/MBD/' + mbd.sched_id)" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-th-list"></span></router-link>
+                                  <router-link :to="('/MBD/update/' + mbd.sched_id)" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-pencil"></span></router-link>
                               </td>
                           </tr>
                       </tbody>
@@ -86,7 +86,7 @@ export default {
               search, facility_cd : that.$store.state.user.facility_cd
           })
           .then(({data}) => {
-              that.mbds = data;
+              that.mbds = _.orderBy(data,['donation_dt'],['desc']);
               that.loading = false;
           })
           .catch(error => {
@@ -102,3 +102,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+.control-label {
+    margin-top:-.5em;
+    font-size: 14px;
+}
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+.error {
+    font-size:12px;
+    margin-top:0.5em;
+}
+</style>

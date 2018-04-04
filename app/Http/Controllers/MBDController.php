@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\MBD;
+use App\Donation;
 
 class MBDController extends Controller
 {
@@ -19,6 +20,11 @@ class MBDController extends Controller
 
     function info(Request $request,$sched_id){
         return MBD::with('donations','donations.donor','donations.processing')->whereSchedId($sched_id)->firstOrFail();
+        // return MBD::whereSchedId($sched_id)->firstOrFail();
+    }
+
+    function donations(Request $request,$sched_id){
+        return Donation::with('donor','processing')->whereSchedId($sched_id)->get();
     }
 
     function shortInfo(Request $request,$sched_id){

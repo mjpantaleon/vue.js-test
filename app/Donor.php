@@ -23,6 +23,12 @@ class Donor extends Model
     function scopeExclude($query,$value = array()){
         return $query->select( array_diff( $this->columns,(array) $value) );
     }
+
+    static function replaceNye($val){
+        $val = str_replace('??','',$val);
+        $val = str_replace('Â','',$val);
+        return $val;
+    }
     
     function region(){
         return $this->belongsTo('App\Region','home_region','regcode')->select('regcode','regname');
@@ -58,5 +64,9 @@ class Donor extends Model
 
     function donations(){
         return $this->hasMany('App\Donation','donor_sn','seqno');
+    }
+
+    function nation(){
+        return $this->belongsTo('App\Nation','countrycode','nationality');
     }
 }

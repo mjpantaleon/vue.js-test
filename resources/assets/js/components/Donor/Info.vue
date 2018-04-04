@@ -3,53 +3,21 @@
       <div class="row" v-if="!loading">
           <div class="col-lg-6">
               <div class="panel panel-success">
-                  <div class="panel-heading">
-                      MBD Details <router-link :to="('./../SearchDonor?donation_id='+donation_id)" class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
-                  </div>
-                    <table class="table table-condensed table-bordered" v-if="mbd">
-                        <tbody>
-                            <tr>
-                                <th class="col-lg-4">Agency</th>
-                                <td>{{mbd.agency_name}}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-lg-4">Date</th>
-                                <td>{{mbd.donation_dt.substr(0,10)}}</td>
-                            </tr>
-                            <tr v-if="donation_id">
-                                <th>Donation ID</th>
-                                <td>{{donation_id}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-              </div>
-          </div>
-      </div>
-      <div class="row" v-if="!loading">
-          <div class="col-lg-6">
-              <div class="panel panel-success">
                   
                   <div class="panel-heading">
                       <span class="glyphicon glyphicon-user"></span> Donor Details
                       <span class="pull-right">
-                        <router-link :to="('./'+seqno+'/update?donation_id='+donation_id)" class="btn btn-default btn-xs">
-                            <span class="glyphicon glyphicon-pencil"></span> Update Information
+                        <router-link :to="('./../Verifier')" class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-arrow-left"></span> Back to List
                         </router-link>
-                        <button v-if="mbd && !alreadyInMBD && !donation_id" 
-                            class="btn btn-default btn-xs" 
+                        <router-link :to="('./'+seqno+'/update')" class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-pencil"></span> Update Info
+                        </router-link>
+                        <button class="btn btn-default btn-xs" 
                             :disabled="(donor.donation_stat == 'N')"
-                            @click.prevent="confirmAdd">
-                            <span class="glyphicon glyphicon-plus"></span> New MBD Donation
+                            @click.prevent="confirmNewWalkin">
+                            <span class="glyphicon glyphicon-plus"></span> New Walk-in
                         </button>
-                        <button v-if="mbd && !alreadyInMBD && donation_id" 
-                            class="btn btn-default btn-xs" 
-                            :disabled="(donor.donation_stat == 'N')"
-                            @click.prevent="confirmAdd">
-                            <span class="glyphicon glyphicon-ok"></span> Assign to {{donation_id}}
-                        </button>
-                        <span v-if="alreadyInMBD" class="text-default">
-                            &nbsp;&nbsp;Donor already in MBD
-                        </span>
 
                       </span>
                   </div>
@@ -188,15 +156,15 @@
           </div>
       </div>
       <loading v-if="loading"></loading>
-      <confirm title="Review Details before procedding." @proceed="addDonorToMBD"></confirm>
+      <confirm title="Review Details before procedding." @proceed="walkInDonation"></confirm>
   </div>
 </template>
 
 <script>
 import $ from "jquery";
-import loading from './../../Loading.vue';
-import confirm from './../../Confirm.vue';
-import filters from './../../../filters';
+import loading from './../Loading.vue';
+import confirm from './../Confirm.vue';
+import filters from './../../filters';
 
 export default {
   filters,
@@ -204,22 +172,10 @@ export default {
   components : {loading,confirm},
   data(){
       return {
-          donation_id : null, mbd : null, donor : null,loading : true
+          mbd : null, donor : null,loading : true
       }
   },
   mounted(){
-      let {currentRoute : {query : {donation_id}}} = this.$router;
-      if(donation_id != null && donation_id != undefined && donation_id != "undefined" && donation_id != "null"){
-          this.donation_id = donation_id;
-      }
-      this.$http.get(this,"mbd/info/"+this.sched_id)
-      .then(({data}) => {
-          this.mbd = data;
-      })
-      .catch(error => {
-          this.$store.state.error = error;
-      });
-
       this.$http.get(this,"donor/"+this.seqno)
       .then(({data}) => {
           this.donor = data;
@@ -243,37 +199,13 @@ export default {
               });
           }
       },
-      confirmAdd(){
+      confirmNewWalkin(){
           $("#confirmDialog").modal("show");
       },
-      addDonorToMBD(c){
-          this.loading = true;
-          let {sched_id,donation_id,donor : {seqno}} = this;
-          let {facility_cd,user_id} = this.$session.get('user');
-          let post_url = donation_id ? 'mbd/assignDonor' : 'mbd/addDonor';
-          this.$http.post(this,post_url,{
-              sched_id,seqno,facility_cd,user_id,donation_id
-          })
-          .then(({data}) => {
-              this.$store.state.msg = {
-                  content : 'Donor has been added to this MBD',
-                  type : 'success'
-              };
-              this.$store.state.MBD.donor_search = {};
-              this.$router.replace("/MBD/"+this.sched_id);
-              c();
-          })
-          .catch(error => {
-              this.$store.state.error = error;
-          });
-      }
-  },
-  computed : {
-      alreadyInMBD(){
-          if(!this.mbd){
-              return false;
-          }
-          return _.filter(this.mbd.donations,{'donor_sn' : this.donor.seqno}).length > 0;
+      walkInDonation(c){
+          //   Proceed to walk-in
+        this.$router.replace("./"+this.seqno+"/donate");
+        c();
       }
   }
 }

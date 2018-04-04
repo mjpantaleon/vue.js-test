@@ -37,4 +37,20 @@ class KeyValueController extends Controller
         return Nation::select(\DB::raw("CONCAT_WS(', ',country,nationality) as 'nation'"),'countrycode')
         ->get();
     }
+
+    function donationtypes(){
+        return CodeValue::whereCode('DONATION_TYPE')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
+    }
+
+    function donorstatuses(){
+        return CodeValue::whereCode('DONOR_STAT')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
+    }
+
+    function collectionmethods(){
+        return CodeValue::whereCode('COLLECTION_METHOD')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
+    }
+
+    function collectionstatuses(){
+        return CodeValue::whereCode('DONATION_STAT')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
+    }
 }

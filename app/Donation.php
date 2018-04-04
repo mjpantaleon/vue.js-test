@@ -12,7 +12,7 @@ class Donation extends Model
     protected $primaryKey = 'seqno';
 
     function donor(){
-        return $this->belongsTo('App\Donor','donor_sn','seqno');
+        return $this->belongsTo('App\Donor','donor_sn','seqno')->exclude('donor_photo');
     }
 
     function processing(){

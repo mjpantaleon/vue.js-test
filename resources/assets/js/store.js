@@ -16,7 +16,8 @@ export default new Vuex.Store({
             donor_search : {
                 fname : null, mname : null, lname : null
             }
-        }
+        },
+        msg : null
     },
     mutations : {
         USER : (state,user) => {
