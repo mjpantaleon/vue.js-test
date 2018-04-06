@@ -36,6 +36,19 @@ class DonationController extends Controller
         return $donation;
     }
 
+    function walkinAssignDonor(Request $request){
+        $donation_id = $request->get('donation_id');
+        $facility_cd = $request->get('facility_cd');
+        $user_id = $request->get('user_id');
+        $donor_sn = $request->get('seqno');
+        $donation = Donation::whereDonationId($donation_id)->first();
+        $donation->donor_sn = $donor_sn;
+        $donation->updated_by = $user_id;
+        $donation->updated_dt = date('Y-m-d H:i:s');
+        $donation->save();
+        return $donation;
+    }
+
     function mbdNewDonor(Request $request){
         $sched_id = $request->get('sched_id');
         $seqno = $request->get('seqno');

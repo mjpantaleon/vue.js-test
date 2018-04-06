@@ -53,5 +53,6 @@ export default new VueRouter({
         
         { path : '/donor/:seqno/donate', component : WalkinCreate, props : true },
         { path : '/Walkin', component : Walkin },
+        { path : '/SelectWalkinDonor', component : DonorVerifier},
     ]
 })

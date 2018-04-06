@@ -17,6 +17,9 @@ export default new Vuex.Store({
                 fname : null, mname : null, lname : null
             }
         },
+        WALKIN : {
+            search : null
+        },
         msg : null
     },
     mutations : {

@@ -29,7 +29,7 @@
                     <span class="glyphicon glyphicon-user"></span> Add New Donor
                 </div>
                 <div class="panel-body form-horizontal">
-                    <!-- <donor-pic-capture @oncomplete="setPhoto"></donor-pic-capture> -->
+                    <donor-pic-capture @oncomplete="setPhoto"></donor-pic-capture>
                     <div class="form-group required">
                         <label for="" class="control-label col-lg-3">First Name</label>
                         <div class="col-lg-9"><input v-validate="'required'" type="text" class="form-control input-sm" v-model="fname" name="First Name"></div>

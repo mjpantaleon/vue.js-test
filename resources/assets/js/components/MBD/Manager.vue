@@ -18,8 +18,35 @@
                     </table>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <donations :schedid="mbd.sched_id"></donations>
+            <div class="col-lg-6" v-if="updateDonationMode && updateDonationModeErrors.length > 0">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Some Errors were found</div>
+                    <div class="panel-body" style="font-size:12px;">
+                        <ul v-for="(error,i) in updateDonationModeErrors" :key="i">
+                            <li v-for="(msg,i2) in error" :key="i2">
+                                <span class="glyphicon glyphicon-remove text-danger"></span> {{msg}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12" v-if="!updateDonationMode">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <router-link :to="('/MBD/'+sched_id+'/SearchDonor')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-search"></span> Search Donor</router-link>
+                        <button @click="updateDonationMode = true" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Update Donation Details</button>
+                    </div>
+                    <donations :schedid="mbd.sched_id" @onselect="updateSelection"></donations>
+                </div>
+            </div>
+            <div class="col-lg-12" v-if="updateDonationMode">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        Update Phlebotomy Details
+                        <button @click="updateDonationMode = false" class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                    </div>
+                    <phlebotomy :donations="selected" @onerror="updateDonationHasErrors"></phlebotomy>
+                </div>
             </div>
         </div>
         <loading v-if="loading"></loading>
@@ -30,17 +57,25 @@
 import loading from './../Loading.vue';
 import rowloading from './../LoadingInline.vue';
 import Donations from './Manager/Donations.vue';
+import Phlebotomy from './Manager/Phlebotomy.vue';
 
 export default {
-  components : { loading, rowloading, Donations },
+  components : { loading, rowloading, Donations, Phlebotomy },
   props : ['sched_id'],
   data(){
       return  {
           mbd : null, loading : false, selected : [],
-          headers : {headers : { Authorization : this.$store.state.token.access_token }}
+          headers : {headers : { Authorization : this.$store.state.token.access_token }},
+          updateDonationMode : false, updateDonationModeErrors : []
       }
   },
   methods : {
+      updateSelection(selection){
+          this.selected = selection;
+      },
+      updateDonationHasErrors(errors){
+          this.updateDonationModeErrors = errors;
+      }
   },
   mounted(){
       this.loading = true;

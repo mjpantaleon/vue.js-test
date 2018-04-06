@@ -39,6 +39,7 @@ Route::middleware('client')->group(function(){
     Route::get('donor/{seqno}', 'DonorController@info');
     Route::get('donor/{seqno}/photo', 'DonorController@photo');
     Route::post('walkin/create', 'DonationController@newWalkIn');
+    Route::post('walkin/assignDonor', 'DonationController@walkinAssignDonor');
     Route::post('walkin', 'DonationController@walkin');
     
 });

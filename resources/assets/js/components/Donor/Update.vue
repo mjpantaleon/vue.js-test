@@ -2,6 +2,17 @@
   <div class="row">
       <div v-if="!loading">
         <div class="col-lg-6">
+            <div class="panel panel-success" v-if="donation_id">
+                <div class="panel-heading">Assign Donor to Walk-in Donation</div>
+                <table class="table table-bordered table-condensed">
+                    <tbody>
+                        <tr>
+                            <td class="col-lg-4">Donation ID</td>
+                            <td>{{donation_id}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-user"></span> Update Donor
@@ -116,7 +127,10 @@ export default {
   components : {loading,DonorPicCapture,DonorAddresses},
   props : ['sched_id','seqno'],
   data(){
-      let {currentRoute :{query :{donation_id}}} = this.$router;
+      let {currentRoute:{query:{donation_id}}} = this.$router;
+      if(donation_id == null || donation_id == undefined || donation_id == 'null' || donation_id == 'undefined'){
+          donation_id = null;
+      }
       return { 
           donation_id ,
           loading : true, donor_photo : null, nations : [],
@@ -228,7 +242,7 @@ export default {
                 this.$store.state.msg = {
                     type : 'success', content : 'Donor has been updated'
                 };
-                this.$router.replace('../'+data.seqno);
+                this.$router.replace('../'+data.seqno+"?donation_id="+this.donation_id);
             })
             .catch(error=>{
                 this.$store.state.error = error;

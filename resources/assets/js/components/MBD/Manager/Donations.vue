@@ -1,9 +1,5 @@
 <template>
-  <div class="panel panel-success">
-    <div class="panel-heading">
-        <router-link :to="('/MBD/'+schedid+'/SearchDonor')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-search"></span> Search Donor</router-link>
-        <a href="#" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Update Donation Details</a>
-    </div>
+  <div>
     <table class="table table-condensed table-bordered table-striped">
         <thead>
             <tr>
@@ -43,13 +39,14 @@
                 <td v-if="d.donor">{{d.donor.gender | gender}}</td>
                 <td v-if="d.donor">{{d.donor.bdate}}</td>
                 <td>{{d.donation_id}}</td>
-                <td>{{d.mh_pe_stat | mhpe}}</td>
+                <td>{{d.donation_stat | mhpe}}</td>
                 <td>{{d.collection_stat | collection}}</td>
             </tr>
         </tbody>
     </table>
     <confirm title="Remove donor from MBD?" @proceed="removeDonor"></confirm>
-   </div>
+
+  </div>
 </template>
 
 <script>
@@ -66,6 +63,18 @@ export default {
   data(){
       return {
           selected : [], donations : [], currentSeqno : null, loading : false
+      }
+  },
+  watch : {
+      selected(){
+          let selectedDonations = [];
+          this.selected.forEach((sel) => {
+              let donation = _.find(this.donations,{seqno : sel});
+              if(donation){
+                  selectedDonations.push(donation);
+              }
+          })
+          this.$emit("onselect",selectedDonations);
       }
   },
   mounted(){

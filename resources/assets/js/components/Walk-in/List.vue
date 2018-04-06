@@ -8,7 +8,7 @@
                 <input type="date" v-model="search" class="form-control input-sm" placeholder="Search Donation ID">
               </div>
           </div>
-          <table class="table table-bordered table-condensed">
+          <table class="table table-bordered table-condensed table-hover">
               <thead>
                   <tr>
                       <th class="text-center">Donor</th>
@@ -39,7 +39,7 @@
                       <td>{{d.collection_stat | collection | uppercase}}</td>
                       <td>{{d.donation_id}}</td>
                       <td>
-                          <button v-if="!d.donor" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-user"></span></button>
+                          <router-link :to="('SelectWalkinDonor?donation_id='+d.donation_id)" v-if="!d.donor" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-user"></span></router-link>
                       </td>
                   </tr>
               </tbody>
@@ -57,11 +57,15 @@ export default {
   components : {Loading},
   data(){
       return {
-          search : null, donations : [], loading : false
+          search : this.$store.state.WALKIN.search, donations : [], loading : false
       }
   },
   mounted(){
-      this.search = this.dateToday();
+      this.search = !this.search ? this.dateToday() : this.search;
+      this.doSearch();
+  },
+  destroyed(){
+      this.$store.state.WALKIN.search = this.search;
   },
   watch : {
      search(){

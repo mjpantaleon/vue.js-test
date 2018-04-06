@@ -1,5 +1,20 @@
 <template>
   <div>
+      <div class="row" v-if="donation_id">
+          <div class="col-lg-6">
+              <div class="panel panel-success">
+                  <div class="panel-heading">Assign Donor to Walk-in Donation</div>
+                  <table class="table table-bordered table-condensed">
+                      <tbody>
+                          <tr>
+                              <td class="col-lg-4">Donation ID</td>
+                              <td>{{donation_id}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
       <div class="row" v-if="!loading">
           <div class="col-lg-6">
               <div class="panel panel-success">
@@ -7,13 +22,19 @@
                   <div class="panel-heading">
                       <span class="glyphicon glyphicon-user"></span> Donor Details
                       <span class="pull-right">
-                        <router-link :to="('./../Verifier')" class="btn btn-default btn-xs">
+                        <router-link :to="('./../Verifier?donation_id='+donation_id)" class="btn btn-default btn-xs">
                             <span class="glyphicon glyphicon-arrow-left"></span> Back to List
                         </router-link>
-                        <router-link :to="('./'+seqno+'/update')" class="btn btn-default btn-xs">
+                        <router-link :to="('./'+seqno+'/update?donation_id='+donation_id)" class="btn btn-default btn-xs">
                             <span class="glyphicon glyphicon-pencil"></span> Update Info
                         </router-link>
                         <button class="btn btn-default btn-xs" 
+                            v-if="donation_id" 
+                            @click.prevent="confirmNewWalkin">
+                            <span class="glyphicon glyphicon-ok"></span> Assign to {{donation_id}}
+                        </button>
+                        <button class="btn btn-default btn-xs" 
+                            v-if="!donation_id" 
                             :disabled="(donor.donation_stat == 'N')"
                             @click.prevent="confirmNewWalkin">
                             <span class="glyphicon glyphicon-plus"></span> New Walk-in
@@ -171,8 +192,12 @@ export default {
   props : ['sched_id','seqno'],
   components : {loading,confirm},
   data(){
+      let {currentRoute:{query:{donation_id}}} = this.$router;
+      if(donation_id == null || donation_id == undefined || donation_id == 'null' || donation_id == 'undefined'){
+          donation_id = null;
+      }
       return {
-          mbd : null, donor : null,loading : true
+          mbd : null, donor : null,loading : true, donation_id
       }
   },
   mounted(){
@@ -204,7 +229,26 @@ export default {
       },
       walkInDonation(c){
           //   Proceed to walk-in
-        this.$router.replace("./"+this.seqno+"/donate");
+        if(!this.donation_id){
+            this.$router.replace("./"+this.seqno+"/donate");
+        }else{
+            this.loading = true;
+            let {seqno,donation_id} = this;
+            let {user_id , facility_cd} = this.$session.get('user');
+            this.$http.post(this,"walkin/assignDonor",{
+                seqno , user_id, facility_cd, donation_id
+            })
+            .then(({data}) => {
+                this.$store.state.msg = {
+                    type : 'success', content : 'Donor assigned to Walk-in Donation'
+                };
+                this.$router.replace('/Walkin');
+                this.loading = false;
+            })
+            .catch(err => {
+                this.$store.state.error = err;
+            });
+        }
         c();
       }
   }
