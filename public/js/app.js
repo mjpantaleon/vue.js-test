@@ -63149,7 +63149,7 @@ var render = function() {
         _vm._v(" "),
         !_vm.loading
           ? _c("div", { staticClass: "col-lg-8" }, [
-              _c("div", { staticClass: "panel panel-primary" }, [
+              _c("div", { staticClass: "panel panel-success" }, [
                 _c(
                   "div",
                   { staticClass: "panel-heading" },
@@ -63285,7 +63285,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("addresspicker", {
-                        attrs: { defaults: _vm.addresspicker },
+                        attrs: { defs: _vm.addresspicker },
                         on: { onchange: _vm.newAddress }
                       }),
                       _vm._v(" "),
@@ -63504,7 +63504,7 @@ var render = function() {
                           _c(
                             "button",
                             {
-                              staticClass: "btn btn-success",
+                              staticClass: "btn btn-default",
                               on: {
                                 click: function($event) {
                                   $event.preventDefault()

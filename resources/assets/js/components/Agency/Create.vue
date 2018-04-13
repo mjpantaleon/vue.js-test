@@ -3,7 +3,7 @@
       <div class="row">
           <loader v-if="loading"></loader>
           <div class="col-lg-8" v-if="!loading">
-              <div class="panel panel-primary">
+              <div class="panel panel-success">
                   <div class="panel-heading">
                       New Agency
                       <router-link to="/Agency" class="pull-right btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</router-link>
@@ -27,7 +27,7 @@
                               <div class="col-lg-8"><input type="text" class="form-control input-sm" v-model="contact_person"></div>
                           </div>
 
-                          <addresspicker :defaults="addresspicker" @onchange="newAddress"></addresspicker>
+                          <addresspicker :defs="addresspicker" @onchange="newAddress"></addresspicker>
 
                           <div class="form-group">
                               <label for="" class="control-label col-lg-4">Zip Code</label>
@@ -62,7 +62,7 @@
 
                           <div class="form-group">
                               <div class="col-lg-8 col-lg-offset-4">
-                                  <button class="btn btn-success" @click.prevent="create">Create Agency</button>
+                                  <button class="btn btn-default" @click.prevent="create">Create Agency</button>
                               </div>
                           </div>
 

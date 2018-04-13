@@ -9,7 +9,7 @@ use App\Blood;
 class HomeController extends Controller
 {
     protected $client_id = 1;
-    protected $client_secret = 'ojKp0pwssfxdhqrYCLMFKfRWCQG9tMkGJmRKCZWm';
+    protected $client_secret = 'zBIjeCg8aT3JYpx2CXcgRnBYPF8dVTNqpwgTP31d';
 
     function login(Request $request){
         $user = User::with('facility','level')->whereUserId($request->get('username'))->wherePassword(md5($request->get('password')))->first();
