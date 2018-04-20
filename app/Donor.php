@@ -67,6 +67,6 @@ class Donor extends Model
     }
 
     function nation(){
-        return $this->belongsTo('App\Nation','countrycode','nationality');
+        return $this->belongsTo('App\Nation','nationality','countrycode');
     }
 }

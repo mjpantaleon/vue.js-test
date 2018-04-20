@@ -22,4 +22,12 @@ class Donation extends Model
     function facility(){
         return $this->belongsTo('App\Facility','facility_cd','facility_cd');
     }
+
+    function test(){
+        return $this->belongsTo('App\TestResult','donation_id','donation_id');
+    }
+
+    function mbd(){
+        return $this->belongsTo('App\MBD','sched_id','sched_id');
+    }
 }
