@@ -8,9 +8,9 @@
                     <label for="" class="control-label col-lg-2">Donor Name</label>
                     <div class="col-lg-9">
                         <div class="row">
-                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="First" v-model="fname"></div>
-                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="Middle" v-model="mname"></div>
-                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="Last" v-model="lname"></div>
+                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="First" v-model="fname" v-on:keyup.enter="doSearch"></div>
+                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="Middle" v-model="mname" v-on:keyup.enter="doSearch"></div>
+                            <div class="col-lg-4"><input type="text" class="form-control input-sm" placeholder="Last" v-model="lname" v-on:keyup.enter="doSearch"></div>
                         </div>
                     </div>
                     <div class="col-lg-1">

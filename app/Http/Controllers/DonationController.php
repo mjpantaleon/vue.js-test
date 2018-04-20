@@ -108,6 +108,43 @@ class DonationController extends Controller
         return $seqno;
     }
 
+    function checkDonationIDs(Request $request){
+        $donation_ids = $request->get('donation_ids');
+        $errors = [];
+        foreach($donation_ids as $donation_id){
+            if($donation_id){
+                $donation = Donation::whereDonationId($donation_id)->first();
+                if($donation){
+                    $errors[] = ["Donation ID ".$donation_id." is already taken."];
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+    function updateDonationDetails(Request $request){
+        $donations = $request->get('donations');
+        $user = $request->get('user');
+        foreach($donations as $donation){
+            $d = Donation::whereSeqno($donation['seqno'])->first();
+            $d->donation_id = $donation['donation_id'];
+            $d->updated_by = $user['user_id'];
+            $d->updated_dt = date('Y-m-d H:i:s');
+            $d->donation_stat = $donation['donation_stat'];
+            $d->mh_pe_stat = $donation['donation_stat'];
+            $d->mh_pe_deferral = $donation['mh_pe_deferral'];
+            $d->mh_pe_question = $donation['mh_pe_question'];
+            $d->mh_pe_remark = $donation['mh_pe_remark'];
+            $d->collection_type = $donation['collection_type'];
+            $d->collection_stat = $donation['collection_stat'];
+            $d->coluns_res = $donation['coluns_res'];
+            $d->save();
+        }
+
+        return $donation;
+    }
+
     function walkin(Request $request){
         $facility_cd = $request->get('facility_cd');
         $date = $request->get('search');

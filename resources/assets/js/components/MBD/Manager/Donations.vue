@@ -81,11 +81,7 @@ export default {
       this.loading = true;
       this.$http.get(this,"mbd/donations/"+this.schedid)
       .then(({data}) => {
-          this.donations = _.orderBy(data,(d) => {
-              if(d.donor){
-                return d.donor.fname;
-              }
-          });
+          this.donations = _.orderBy(data,['seqno']);
           this.loading = false;
       })
       .catch(error => {

@@ -120,21 +120,22 @@
 <script>
 import _ from 'lodash';
 export default {
+    props : ['reuse'],
     data(){
-        return {
-            questions : [], selections : [], hemoglobin : null, bodyweight : null, bloodpressure : null, pulserate : null, temperature : null
-        }
+        return this.defaults();
     },
     mounted(){
-        this.$http.get(this,'dhq/questions')
-        .then(({data}) => {
-            this.questions = _.orderBy(data,['no'],['desc']);
-        })
-        .catch(error => {
-            this.$store.state.error = error;
-        });
+        this.fetchQuestions();
     },
     watch : {
+        reuse(){
+            this.selections = [];
+            this.hemoglobin = null;
+            this.bodyweight = null;
+            this.bloodpressure = null;
+            this.pulserate = null;
+            this.temperature = null;
+        },
         selections(){
             this.compute();
         },
@@ -155,6 +156,20 @@ export default {
         }
    },
    methods: {
+       defaults(){
+           return {
+                questions : [], selections : [], hemoglobin : null, bodyweight : null, bloodpressure : null, pulserate : null, temperature : null
+            }
+       },
+       fetchQuestions(){
+           this.$http.get(this,'dhq/questions')
+            .then(({data}) => {
+                this.questions = _.orderBy(data,['no'],['desc']);
+            })
+            .catch(error => {
+                this.$store.state.error = error;
+            });
+       },
        clearPE(){
            this.hemoglobin = null;
            this.bodyweight = null;

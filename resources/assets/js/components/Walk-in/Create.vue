@@ -79,7 +79,7 @@
 
 <script>
 import Loading from './../Loading.vue';
-import Questions from './Questions.vue';
+import Questions from './../Questionaire/Questions.vue';
 
 
 export default {

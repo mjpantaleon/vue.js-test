@@ -18,7 +18,7 @@
                     </table>
                 </div>
             </div>
-            <div class="col-lg-6" v-if="updateDonationMode && updateDonationModeErrors.length > 0">
+            <div class="col-lg-6" v-if="updateDonationMode && updateDonationModeErrors.toString().replace(/[,]+/g,'').length > 0">
                 <div class="panel panel-danger">
                     <div class="panel-heading">Some Errors were found</div>
                     <div class="panel-body" style="font-size:12px;">
@@ -45,11 +45,12 @@
                         Update Phlebotomy Details
                         <button @click="updateDonationMode = false" class="btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
                     </div>
-                    <phlebotomy :donations="selected" @onerror="updateDonationHasErrors"></phlebotomy>
+                    <phlebotomy :donations="selected" @onerror="updateDonationHasErrors" @oncomplete="updateDonationIsDone"></phlebotomy>
                 </div>
             </div>
         </div>
         <loading v-if="loading"></loading>
+        <Verifier class="col-lg-6 col-lg-offset-3"></Verifier>
     </div>
 </template>
 
@@ -58,9 +59,10 @@ import loading from './../Loading.vue';
 import rowloading from './../LoadingInline.vue';
 import Donations from './Manager/Donations.vue';
 import Phlebotomy from './Manager/Phlebotomy.vue';
+import Verifier from './../Verifier.vue';
 
 export default {
-  components : { loading, rowloading, Donations, Phlebotomy },
+  components : { loading, rowloading, Donations, Phlebotomy, Verifier },
   props : ['sched_id'],
   data(){
       return  {
@@ -75,6 +77,9 @@ export default {
       },
       updateDonationHasErrors(errors){
           this.updateDonationModeErrors = errors;
+      },
+      updateDonationIsDone(){
+          this.updateDonationMode = false;
       }
   },
   mounted(){

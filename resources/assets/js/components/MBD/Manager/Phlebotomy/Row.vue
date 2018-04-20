@@ -15,7 +15,9 @@
             </select>
         </td>
         <td>
-            <input type="text" class="form-control input-sm" v-model="donation.mh_pe_question"  :disabled="donation.donation_stat == 'A' || !donation.donation_stat">
+            <a href="#mhpe_questionaire"  data-toggle="modal">
+                <input type="text" class="form-control input-sm" v-model="donation.mh_pe_question"  :disabled="donation.donation_stat == 'A' || !donation.donation_stat" @click.prevent="$emit('mhpeClicked')">
+            </a>
         </td>
         <td class="col-lg-2">
             <div class="input-group">
@@ -23,7 +25,7 @@
                 <div class="input-group-btn"><button class="btn btn-success btn-sm" :disabled="!new_remark" @click="saveRemark"><span class="glyphicon glyphicon-ok"></span></button></div>
             </div>
             <span v-if="mh_pe_remarks">
-                <div class="btn-group" v-for="(remark,i) in mh_pe_remarks" :key="i" style="margin:0.5em;">
+                <div class="btn-group" v-for="(remark,i) in mh_pe_remarks" :key="i" style="margin:0.5em;display:flex;">
                     <button class="btn btn-danger btn-xs" @click="removeRemark(remark)">{{remark}}</button>
                     <button class="btn btn-default btn-xs" @click="removeRemark(remark)"><span class="glyphicon glyphicon-remove text-danger"></span></button>
                 </div>
@@ -65,7 +67,27 @@ export default {
           });
       }
   },
+  computed : {
+      mh_pe_remark(){
+          return this.donation.mh_pe_remark;
+      }
+  },
   watch : {
+      donation :{
+          handler(){
+              this.donation.donation_id = this.donation.donation_id ? this.donation.donation_id.toUpperCase() : null;
+              this.donation.coluns_res = this.donation.coluns_res ? this.donation.coluns_res.toUpperCase() : null;
+          },
+          deep : true
+      },
+      new_remark(){
+          this.new_remark = this.new_remark ? this.new_remark.toUpperCase() : null;
+      },
+      mh_pe_remark(){
+          if(this.mh_pe_remark != null){
+             this.mh_pe_remarks = this.mh_pe_remark.split(",");
+          }
+      },
       mh_pe_remarks(){
           this.donation.mhpe_remark = this.mh_pe_remarks.join(',');
       }

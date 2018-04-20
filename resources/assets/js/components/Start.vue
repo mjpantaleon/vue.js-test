@@ -18,10 +18,11 @@
 import navbar from './navbar.vue';
 import login from './login.vue';
 import flushAlert from './flush-alert.vue';
+import Verifier from './Verifier.vue';
 
 export default {
     components: {
-        navbar, login, alert,flushAlert
+        navbar, login, alert,flushAlert,Verifier
     },
     mounted(){
         if(this.$session.has('user')){

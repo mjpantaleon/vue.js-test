@@ -27,7 +27,7 @@
                               <div class="col-lg-8"><input type="text" class="form-control input-sm" v-model="contact_person"></div>
                           </div>
 
-                          <addresspicker :defaults="addresspicker" @onchange="newAddress"></addresspicker>
+                          <addresspicker :defs="addresspicker" @onchange="newAddress"></addresspicker>
 
                           <div class="form-group">
                               <label for="" class="control-label col-lg-4">Zip Code</label>
