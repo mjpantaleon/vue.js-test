@@ -3,7 +3,7 @@
       <navbar></navbar>
       <div class="container">
           <div class="content" style="padding-top:80px;" v-if="!$store.state.error">
-              <flush-alert></flush-alert>
+              <flushAlert></flushAlert>
               <router-view v-if="!guest"></router-view>
               <login v-if="guest"></login>
           </div>
@@ -17,12 +17,10 @@
 <script>
 import navbar from './navbar.vue';
 import login from './login.vue';
-import flushAlert from './flush-alert.vue';
-import Verifier from './Verifier.vue';
 
 export default {
     components: {
-        navbar, login, alert,flushAlert,Verifier
+        navbar, login
     },
     mounted(){
         if(this.$session.has('user')){

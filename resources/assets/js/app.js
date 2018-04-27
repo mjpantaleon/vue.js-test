@@ -6,21 +6,22 @@
 
 import VueSession from 'vue-session';
 import VeeValidate from 'vee-validate';
+import _ from 'lodash';
+import $ from 'jquery';
 import router from './router';
 import store from './store';
-import Datatable from 'vue2-datatable-component';
-import BootstrapVue from 'bootstrap-vue';
-import error from './components/error.vue';
 import http from './http';
+import error from './components/Tools/error.vue';
+
+import _globals from './_globals';
 
 require('./bootstrap');
 
 window.Vue = require('vue');
+import './filters';
 
 Vue.use(VueSession);
 Vue.use(VeeValidate);
-Vue.use(Datatable);
-Vue.use(BootstrapVue);
 Vue.prototype.$http = http;
 
 Vue.component('start', require('./components/Start.vue'));

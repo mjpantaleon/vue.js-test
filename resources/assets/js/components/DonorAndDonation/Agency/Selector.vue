@@ -1,0 +1,102 @@
+<template>
+  <div class="modal fade" id="agencySelector">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+              <div class="modal-header bg-primary">
+                  <h5 class="modal-title">Select Agency
+                      <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                  </h5>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col-lg-12 text-center">
+                          <abc123 @hasClicked="selectLetter"></abc123>
+                      </div>
+                  </div>
+              </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Agency</th>
+                            <th>Contact Person</th>
+                            <th>DRO</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="loading">
+                            <td class="text-center" colspan="5">
+                                <loading-inline label="Please wait.."></loading-inline>
+                            </td>
+                        </tr>
+                        <tr v-if="loaded && !agencies">
+                            <td class="text-center" colspan="5">No Agencies Yet</td>
+                        </tr>
+                        <tr v-if="loaded && !letter">
+                            <td class="text-center" colspan="5">Select a Letter</td>
+                        </tr>
+                        <tr v-if="loaded && letter" v-for="a in filteredAgencies" :key="a.agency_cd">
+                            <td>{{a.agency_name}}</td>
+                            <td>{{a.contact_person.substr(0,20)}}..</td>
+                            <td>{{a.owner.substr(0,20)}}..</td>
+                            <td>
+                                <button class="btn btn-success btn-xs" data-dismiss="modal" @click.prevent="selectAgency(a)"><span class="glyphicon glyphicon-search"></span></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+      </div>
+  </div>
+</template>
+
+<script>
+
+export default {
+  data(){
+      return { loading: true, loaded: false, agencies : [], letter: null }
+  },
+  mounted(){
+      this.$http.post(this,"agencies",{
+          facility_cd : this.$store.state.user.facility_cd
+      })
+      .then(({data}) => {
+          this.agencies = data;
+          this.loaded = true;
+          this.loading = false;
+      })
+      .catch(error => {
+          this.$store.state.error = error;
+      });
+  },
+  computed: {
+      filteredAgencies(){
+          if(!this.letter){
+              return [];
+          }
+          if(this.letter == '#'){
+            return _.filter(this.agencies,((r) => {
+                if(!isNaN(r.agency_name.substr(0,1))){
+                    return r;
+                }
+            }));    
+          }
+          return _.filter(this.agencies,((r) => {
+              if(r.agency_name.substr(0,1).toUpperCase() == this.letter.toUpperCase()){
+                  return r;
+              }
+          }));
+      }
+  },
+  methods : {
+      selectLetter(l){
+          this.letter = l;
+      },
+      selectAgency(agency){
+          this.$emit('onselect',agency);
+      }
+  }
+}
+</script>

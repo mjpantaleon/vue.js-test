@@ -3,26 +3,26 @@ import VueRouter from 'vue-router';
 
 import Home from './components/Home.vue';
 import ChangePassword from './components/Home/ChangePassword.vue';
-import AgencyManger from './components/Agency/Manager.vue';
-import AgencyInfo from './components/Agency/Info.vue';
-import AgencyCreate from './components/Agency/Create.vue';
-import AgencyEdit from './components/Agency/Edit.vue';
+import AgencyManger from './components/DonorAndDonation/Agency/Manager.vue';
+import AgencyInfo from './components/DonorAndDonation/Agency/Info.vue';
+import AgencyCreate from './components/DonorAndDonation/Agency/Create.vue';
+import AgencyEdit from './components/DonorAndDonation/Agency/Edit.vue';
 
-import MBD from './components/MBD/List.vue';
-import MBDManager from './components/MBD/Manager.vue';
-import MBDCreate from './components/MBD/Create.vue';
-import MBDAddDonor from './components/MBD/SelectDonor.vue';
-import MBDNewDonor from './components/Donor/selector/Create.vue';
-import MBDUpdateDonor from './components/Donor/selector/Update.vue';
-import MBDDonorInfo from './components/Donor/selector/Info.vue';
+import MBD from './components/DonorAndDonation/MBD/List.vue';
+import MBDManager from './components/DonorAndDonation/MBD/Manager.vue';
+import MBDCreate from './components/DonorAndDonation/MBD/Create.vue';
+import MBDAddDonor from './components/DonorAndDonation/MBD/SelectDonor.vue';
+import MBDNewDonor from './components/DonorAndDonation/Donor/selector/Create.vue';
+import MBDUpdateDonor from './components/DonorAndDonation/Donor/selector/Update.vue';
+import MBDDonorInfo from './components/DonorAndDonation/Donor/selector/Info.vue';
 
-import DonorVerifier from './components/Donor/Verifier.vue';
-import DonorProfile from './components/Donor/Info.vue';
-import DonorUpdate from './components/Donor/Update.vue';
-import DonorCreate from './components/Donor/Create.vue';
+import DonorVerifier from './components/DonorAndDonation/Donor/Verifier.vue';
+import DonorProfile from './components/DonorAndDonation/Donor/Info.vue';
+import DonorUpdate from './components/DonorAndDonation/Donor/Update.vue';
+import DonorCreate from './components/DonorAndDonation/Donor/Create.vue';
 
-import WalkinCreate from './components/Walk-in/Create.vue';
-import Walkin from './components/Walk-in/List.vue';
+import WalkinCreate from './components/DonorAndDonation/Walk-in/Create.vue';
+import Walkin from './components/DonorAndDonation/Walk-in/List.vue';
 
 Vue.use(VueRouter);
 

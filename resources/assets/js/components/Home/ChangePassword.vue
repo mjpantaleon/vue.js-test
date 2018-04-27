@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-      <div class="col-lg-6 col-lg-offset-3">
+  <div class="row" style="margin-top:50px;">
+      <div class="col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3">
           <div class="panel panel-success">
               <div class="panel-heading">Change Password</div>
               <div class="panel-body form-horizontal" v-if="!done">
@@ -20,10 +20,10 @@
 
                   <div class="form-group">
                       <div class="col-lg-8 col-lg-offset-4">
-                          <a href="#" class="btn btn-default btn-sm" :disabled="!formok" @click.prevent="changePassword">Change Password</a>
+                          <button class="btn btn-default btn-sm" :disabled="!formok" @click.prevent="changePassword">Change Password</button>
                           <div v-if="loading" >
                               <br/>
-                              <loading label="Saving, please wait.."></loading>
+                              <loadingInline label="Saving, please wait.."></loadingInline>
                           </div>
                           <div v-if="error" class="text-danger">
                               <br/>
@@ -43,10 +43,8 @@
 </template>
 
 <script>
-import loading from './../LoadingInline.vue';
 
 export default {
-    components : {loading} ,
     data(){
         return {
             oldpassword : null, newpassword : null, confirm : null, loading : false, done : false, error : ''

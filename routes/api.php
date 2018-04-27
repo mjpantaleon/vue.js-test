@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::post('login','HomeController@login');
 
 Route::middleware('client')->group(function(){
+    Route::post('verify', 'HomeController@verify');
     Route::post('stocks', 'HomeController@stocks');
     Route::post('changepassword', 'HomeController@changepassword');
 

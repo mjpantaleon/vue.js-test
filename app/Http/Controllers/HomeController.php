@@ -29,6 +29,10 @@ class HomeController extends Controller
         ];
     }
 
+    function verify(Request $request){
+        return User::whereUserId($request->get('username'))->wherePassword(md5($request->get('password')))->whereFacilityCd($request->get('facility_cd'))->first();
+    }
+
     function token(){
         $http = new \GuzzleHttp\Client;
 

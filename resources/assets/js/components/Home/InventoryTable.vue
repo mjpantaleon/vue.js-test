@@ -1,7 +1,7 @@
 <template>
   <div class="table-responsive">
       <div class="panel-body" v-if="loading" >
-        <loading label="Loading Inventory"></loading>  
+        <loadingInline label="Loading Inventory"></loadingInline>  
       </div>
       <table class="table table-condensed table-striped table-bordered" v-if="!loading">
           <thead>
@@ -21,13 +21,9 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import loading from "./../LoadingInline.vue";
-import filters from './../../filters';
 
 export default {
-  components : { loading },
-  filters,
+  filters : this.$filters,
   data(){
       let {components,blood_types} = this.$session.getAll();
       

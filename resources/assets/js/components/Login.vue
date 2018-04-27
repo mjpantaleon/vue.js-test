@@ -18,8 +18,10 @@
  			 </div>
 
 			  <p class="p-container">
-			    <span><a href="#" v-if="!loading">Forgot password ?</a></span>
-			    <span style="color:#fff;" v-if="loading"><loading label=" Please wait.." class="pull-left"></loading></span>
+			    <!-- <span><a href="#" v-if="!loading">Forgot password ?</a></span> -->
+			    <span style="color:#fff;" v-if="loading">
+					<loadingInline label=" Please wait.." class="pull-left"></loadingInline>
+				</span>
 			    <input type="submit" value="Login" @click.prevent="login" :disabled="loading">
                 
 			  </p>
@@ -29,12 +31,8 @@
 </template>
 
 <script>
-import loading from './LoadingInline.vue';
 
 export default {
-  components : {
-      loading
-  },
   data(){
       return {
           username : null, password : null, error : null, loading : false
@@ -71,8 +69,8 @@ export default {
             }else{
 				this.password = '';
 				this.error = data.error;
+				this.loading = false;
 			};
-			this.loading = false;
           });
       }
   }
