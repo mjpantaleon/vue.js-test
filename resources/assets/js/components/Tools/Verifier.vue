@@ -57,11 +57,11 @@ export default {
       },
       verify(){
           let {username,password} = this;
-          let facility_cd = this.$session.get('user').facility_cd;
+          let {user_id,facility_cd} = this.$session.get('user');
           
           this.loading = true;
           this.$http.post(this,"verify",{
-              username, password, facility_cd
+              username, password, facility_cd, current_user_id : user_id
           })
           .then(({data}) => {
               if(!data){

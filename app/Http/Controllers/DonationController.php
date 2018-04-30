@@ -123,6 +123,25 @@ class DonationController extends Controller
         return $errors;
     }
 
+    function registerCheckDonationIDs(Request $request){
+        $donation_ids = $request->get('donation_ids');
+        $errors = [];
+        foreach($donation_ids as $donation_id){
+            if($donation_id){
+                $donation = Donation::whereDonationId($donation_id)->first();
+                if($donation){
+                    if($donation->blood_bag){
+                        $errors[] = ["Donation ID ".$donation_id." is already registered"];
+                    }else if($donation->mh_pe_stat != 'A' || $donation->collection_stat != 'COL'){
+                        $errors[] = ["Donation ID ".$donation_id." has unsuccesfull collection result."];
+                    }
+                }
+            }
+        }
+
+        return $errors;
+    }
+
     function updateDonationDetails(Request $request){
         $donations = $request->get('donations');
         $user = $request->get('user');
@@ -153,5 +172,39 @@ class DonationController extends Controller
         ->whereSchedId('Walk-in')
         ->where('created_dt','like',$date.'%')
         ->orderBy('created_dt','desc')->get();
+    }
+
+    function register(Request $request){
+        $sched_id = $request->get('sched_id');
+        $user_id = $request->get('user_id');
+        $facility_cd = $request->get('facility_cd');
+        $verifier = $request->get('verifier');
+        $rows = $request->get('rows');
+
+        foreach($rows as $row){
+            $donation = Donation::whereDonationId($row['donation_id'])->first();
+            if(!$donation){
+                $d = new Donation;
+                $d->seqno = $this->generateSeqno($facility_cd);
+                $d->donation_id = $row['donation_id'];
+                $d->sched_id = $sched_id;
+                $d->donation_type = 'V';
+                $d->collection_method = 'WB';
+                $d->donation_stat = 'A';
+                $d->mh_pe_stat = 'A';
+                $d->collection_stat = 'COL';
+                $d->blood_bag = $row['bag'];
+                $d->created_by = $user_id;
+                $d->created_dt = date('Y-m-d h:i:s');
+                $d->facility_cd = $facility_cd;
+                $d->pre_registered = 'Y';
+                $d->save();
+            }else{
+                $donation->blood_bag = $row['bag'];
+                $donation->updated_by = $user_id;
+                $donation->updated_dt = date('Y-m-d H:i:s');
+                $donation->save();
+            }
+        }
     }
 }

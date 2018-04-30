@@ -56,10 +56,11 @@ export default {
 				this.$store.commit('TOKEN',data.token);
 				
 				this.$http.get(this,"keyvalues")
-				.then(({data : {components,bloodtypes,civilstatus}}) => {
+				.then(({data : {components,bloodtypes,civilstatus,bloodbags}}) => {
 					this.$session.set('components',components);
 					this.$session.set('blood_types',bloodtypes);
 					this.$session.set('civil_status',civilstatus);
+					this.$session.set('blood_bags',bloodbags);
 					this.$session.set("user",data.user);
 					this.$store.commit('USER',data.user);
 				})

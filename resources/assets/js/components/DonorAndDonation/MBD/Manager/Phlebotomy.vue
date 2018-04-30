@@ -97,6 +97,8 @@ export default {
                       err.push('Invalid Donation ID at row no. '+i);
                   }else if(duplicate > 1){
                       err.push('Duplicate Donation ID at row no. '+i);
+                  }else if(!donation_id.startsWith('NVBSP')){
+                      err.push('Invalid format for Donation ID at row no. '+i);
                   }
               }
               if(err){

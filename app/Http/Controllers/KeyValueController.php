@@ -14,7 +14,8 @@ class KeyValueController extends Controller
         return [
             'components' => $this->components(),
             'bloodtypes' => $this->bloodtypes(),
-            'civilstatus' => $this->civilstatus()
+            'civilstatus' => $this->civilstatus(),
+            'bloodbags' => $this->bloodbags()
         ];
     }
 
@@ -31,6 +32,10 @@ class KeyValueController extends Controller
         return [
             'S' => 'Single', 'M' => 'Married', 'W' => 'Widowed', 'SP' => 'Separated'
         ];
+    }
+
+    function bloodbags(){
+        return CodeValue::whereCode('BLOOD_BAG')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
     }
 
     function nations(){

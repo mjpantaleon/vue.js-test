@@ -41,7 +41,7 @@
             </select>
         </td>
         <td>
-            <input type="text" class="form-control input-sm" v-model="donation.donation_id"  :disabled="!donation.donation_stat || donation.donation_stat != 'A'">
+            <input type="text" class="form-control input-sm" v-model="donation.donation_id"  :disabled="!donation.donation_stat || donation.donation_stat != 'A'" maxlength="16">
         </td>
         <td>
             <input type="text" class="form-control input-sm" v-model="donation.coluns_res" :disabled="!donation.donation_stat || (!donation.collection_stat || donation.collection_stat != 'UNS')">

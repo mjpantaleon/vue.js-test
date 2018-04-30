@@ -1,6 +1,6 @@
 <template>
   <div>
-      <a href="#" class="abc" v-for="a in letters" :key="a" @click.prevent="clicked(a)">{{a}}</a>
+      <a href="#" class="abc text-primary" v-for="a in letters" :key="a" @click.prevent="clicked(a)">{{a}}</a>
   </div>
 </template>
 
@@ -23,6 +23,7 @@ export default {
 .abc{
     padding-left: 0.58em;
     padding-right: 0.58em;
+
 }
 </style>
 

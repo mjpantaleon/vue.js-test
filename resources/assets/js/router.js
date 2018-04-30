@@ -24,6 +24,10 @@ import DonorCreate from './components/DonorAndDonation/Donor/Create.vue';
 import WalkinCreate from './components/DonorAndDonation/Walk-in/Create.vue';
 import Walkin from './components/DonorAndDonation/Walk-in/List.vue';
 
+import RegisterUnit from './components/BloodUnit/RegisterUnit.vue';
+import Typing from './components/BloodUnit/Typing.vue';
+import Processing from './components/BloodUnit/Processing.vue';
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -54,5 +58,8 @@ export default new VueRouter({
         { path : '/donor/:seqno/donate', component : WalkinCreate, props : true },
         { path : '/Walkin', component : Walkin },
         { path : '/SelectWalkinDonor', component : DonorVerifier},
+        { path : '/RegisterUnit', component : RegisterUnit },
+        { path : '/Typing', component : Typing },
+        { path : '/Processing', component : Processing },
     ]
 })

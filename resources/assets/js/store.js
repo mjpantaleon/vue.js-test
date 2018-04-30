@@ -20,7 +20,10 @@ export default new Vuex.Store({
         WALKIN : {
             search : null
         },
-        msg : null
+        msg : null,
+        sched : {
+            sched_id : null, agency_cd : null
+        }
     },
     mutations : {
         USER : (state,user) => {

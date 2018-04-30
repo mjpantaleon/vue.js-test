@@ -59,7 +59,7 @@
                    </div>
                    <div class="form-group required">
                        <label for="" class="control-label col-lg-3">Donation ID</label>
-                       <div class="col-lg-9"><input type="text" class="form-control input-sm" v-model="donation_id" name="Donation ID"></div>
+                       <div class="col-lg-9"><input type="text" class="form-control input-sm" v-model="donation_id" name="Donation ID" maxlength="16"></div>
                        <i class="text-danger error col-lg-9 col-lg-offset-3" v-show="errors.has('Donation ID')">{{ errors.first('Donation ID') }}</i>
                    </div>
                    <div class="form-group">
@@ -142,6 +142,8 @@ export default {
               this.errors.add('Donation ID','Scan / Enter Donation ID');
           }
           if(this.donation_id.length != 16){
+              this.errors.add('Donation ID','Invalid Format for Donaion ID');
+          }else if(!this.donation_id.startsWith('NVBSP')){
               this.errors.add('Donation ID','Invalid Format for Donaion ID');
           }
           if(this.mh_pe_stat != 'A'){

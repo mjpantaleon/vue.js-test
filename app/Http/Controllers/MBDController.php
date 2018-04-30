@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\MBD;
+use App\Agency;
 use App\Donation;
 
 class MBDController extends Controller
@@ -64,5 +65,18 @@ class MBDController extends Controller
         }
 
         return $new;
+    }
+
+    function agencyStartWith(Request $request){
+        $facility_cd = $request->get('facility_cd');
+        $letter = $request->get('letter');
+        return Agency::select('agency_cd','agency_name','facility_cd')
+                ->whereFacilityCd($facility_cd)
+                ->where('agency_name','like',$letter.'%')
+                ->get();
+    }
+
+    function agencyMBDs($agency_cd){
+        return MBD::select('sched_id','agency_cd','agency_name','donation_dt')->whereAgencyCd($agency_cd)->get();
     }
 }

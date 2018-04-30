@@ -45,6 +45,14 @@ Route::middleware('client')->group(function(){
     Route::post('walkin/assignDonor', 'DonationController@walkinAssignDonor');
     Route::post('walkin', 'DonationController@walkin');
     
+    
+    Route::post('register/checkDonationIDs', 'DonationController@registerCheckDonationIDs');
+    Route::post('donation/register', 'DonationController@register');
+    Route::post('typing/list','TypingController@lists');
+    Route::post('typing/save','TypingController@save');
+    Route::post('processing/list','ProcessingController@lists');
+    Route::post('processing/save','ProcessingController@save');
+
 });
 
 Route::middleware('client')->group(function(){
@@ -61,6 +69,12 @@ Route::middleware('client')->group(function(){
     Route::get('keyvalues/collectionstatuses','KeyValueController@collectionstatuses');
 
     Route::get('dhq/questions','DHQController@questions');
+
+    Route::post('mbdselect/letter','MBDController@agencyStartWith');
+    Route::get('mbdselect/agencyMBDs/{agency_cd}','MBDController@agencyMBDs');
+    
+    Route::get('bloodbag/components','BagComponentController@lists');
+    
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

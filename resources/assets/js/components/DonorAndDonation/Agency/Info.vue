@@ -72,7 +72,7 @@
                             <div class="list-group-item-text">
                                 <div class="row">
                                     <div class="col-lg-6">Province</div>
-                                    <div class="col-lg-6">{{ agency.province.provname }}</div>
+                                    <div class="col-lg-6">{{ agency.province | novalue('provname') }}</div>
                                 </div>
                             </div>
                         </li>
@@ -81,7 +81,7 @@
                             <div class="list-group-item-text">
                                 <div class="row">
                                     <div class="col-lg-6">City</div>
-                                    <div class="col-lg-6">{{ agency.city.cityname }}</div>
+                                    <div class="col-lg-6">{{ agency.city | novalue('cityname') }}</div>
                                 </div>
                             </div>
                         </li>
@@ -90,7 +90,7 @@
                             <div class="list-group-item-text">
                                 <div class="row">
                                     <div class="col-lg-6">Barangay</div>
-                                    <div class="col-lg-6">{{ (agency.barangay ? agency.barangay.bgyname : null) }}</div>
+                                    <div class="col-lg-6">{{ agency.barangay | novalue('bgyname')  }}</div>
                                 </div>
                             </div>
                         </li>

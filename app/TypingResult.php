@@ -4,19 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Processing extends Model
+class TypingResult extends Model
 {
-    protected $table = 'bloodproc';
+    protected $table = "blood_typing";
     public $timestamps = false;
-    public $primaryKey = 'bloodproc_no';
     public $incrementing = false;
+    protected $primaryKey = 'bloodtyping_no';
 
     static function generateNo($facility_cd,$i = 1,$max = null){
         if(!$max){
-            $max = self::select('bloodproc_no')
+            $max = TypingResult::select('bloodtyping_no')
                     ->whereFacilityCd($facility_cd)
-                    ->where('bloodproc_no','like',$facility_cd.'%')
-                    ->orderBy('bloodproc_no','desc')->first()->bloodproc_no;
+                    ->where('bloodtyping_no','like',$facility_cd.'%')
+                    ->orderBy('bloodtyping_no','desc')->first()->bloodtyping_no;
             if(!$max){
                 return $facility_cd.date('Y').str_pad('1',5,'0',STR_PAD_LEFT);
             }
@@ -26,7 +26,7 @@ class Processing extends Model
         $num = abs($num);
         $num = $num+$i;
         $new = $facility_cd.date('Y').str_pad($num,7,'0',STR_PAD_LEFT);
-        $isExists = self::whereBloodprocNo($new)->first();
+        $isExists = TypingResult::whereBloodtypingNo($new)->first();
         if($isExists){
             $i++;
             return self::generateNo($facility_cd,$i,$max);
