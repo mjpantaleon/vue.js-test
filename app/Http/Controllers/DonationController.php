@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Donation;
+use App\Http\Controllers\FlagReactiveController;
 
 class DonationController extends Controller
 {
@@ -46,6 +47,9 @@ class DonationController extends Controller
         $donation->updated_by = $user_id;
         $donation->updated_dt = date('Y-m-d H:i:s');
         $donation->save();
+
+        FlagReactiveController::flag($donation_id,$facility_cd);
+
         return $donation;
     }
 
@@ -76,6 +80,8 @@ class DonationController extends Controller
         $donation->updated_by = $request->get('user_id');
         $donation->updated_dt = date('Y-m-d H:i:s');
         $donation->save();
+
+        FlagReactiveController::flag($request->get('donation_id'),$request->get('facility_cd'));
 
         return $donation;
     }

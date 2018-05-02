@@ -52,6 +52,8 @@ Route::middleware('client')->group(function(){
     Route::post('typing/save','TypingController@save');
     Route::post('processing/list','ProcessingController@lists');
     Route::post('processing/save','ProcessingController@save');
+    Route::post('testing/list','TestingController@lists');
+    Route::post('testing/save','TestingController@save');
 
 });
 
@@ -67,6 +69,7 @@ Route::middleware('client')->group(function(){
     Route::get('keyvalues/donorstatuses','KeyValueController@donorstatuses');
     Route::get('keyvalues/collectionmethods','KeyValueController@collectionmethods');
     Route::get('keyvalues/collectionstatuses','KeyValueController@collectionstatuses');
+    Route::get('keyvalues/exams','KeyValueController@exams');
 
     Route::get('dhq/questions','DHQController@questions');
 

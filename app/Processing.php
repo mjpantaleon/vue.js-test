@@ -18,7 +18,7 @@ class Processing extends Model
                     ->where('bloodproc_no','like',$facility_cd.'%')
                     ->orderBy('bloodproc_no','desc')->first()->bloodproc_no;
             if(!$max){
-                return $facility_cd.date('Y').str_pad('1',5,'0',STR_PAD_LEFT);
+                return $facility_cd.date('Y').str_pad('1',7,'0',STR_PAD_LEFT);
             }
         }
 

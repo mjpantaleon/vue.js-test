@@ -9,5 +9,6 @@ class Blood extends Model
     protected $table = 'component';
     public $timestamps = false;
     public $incrementing = false;
+    public $primaryKey = 'donation_id';
     
 }

@@ -7,6 +7,7 @@ use App\Component;
 use App\BloodType;
 use App\CodeValue;
 use App\Nation;
+use App\Exam;
 
 class KeyValueController extends Controller
 {
@@ -57,5 +58,9 @@ class KeyValueController extends Controller
 
     function collectionstatuses(){
         return CodeValue::whereCode('DONATION_STAT')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
+    }
+
+    function exams(){
+        return Exam::whereDisableFlg('N')->pluck('exam_name','exam_cd');
     }
 }

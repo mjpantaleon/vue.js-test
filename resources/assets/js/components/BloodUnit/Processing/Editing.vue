@@ -16,20 +16,20 @@
                               <th v-for="(cn,cd) in components" :key="cd" style="font-size:10px;" class="text-center">{{cn}}</th>
                           </tr>
                       </thead>
-                      <tbody>
+                      <tbody v-if="rules">
                           <row v-for="(donation,i) in donations" 
                                 :key="donation.donation_id" 
                                 :no="(i+1)" 
                                 :bloodBags="blood_bags" 
                                 :components="components" 
                                 :donation="donation"
-                                :rules="rules"></row>
+                                :rules="rules[donation.blood_bag]"></row>
                       </tbody>
                       <tfoot>
                           <tr>
                               <td :colspan="(4+Object.keys(components).length)" class="text-right">
                                   <loadingInline v-if="loading" label="Please wait, loading.."></loadingInline>
-                                <button class="btn btn-default" :disabled="checkData || loading" @click="validateForm">Save Changes</button>
+                                <button class="btn btn-default" :disabled="loading" @click="validateForm">Save Changes</button>
                                 <button class="btn btn-danger" :disabled="loading" @click.prevent="donations = []; $emit('cancel',null)">Cancel</button>
                               </td>
                           </tr>
@@ -66,19 +66,8 @@ export default {
           this.rules = data;
       });
   },
-  computed : {
-      checkData(){
-          let noABO = _.filter(this.donations,{abo : null});
-          let noRH = _.filter(this.donations,{rh : null});
-          let incomplete = noABO.length + noRH.length;
-          return incomplete > 0;
-      }
-  },
   methods : {
       validateForm(){
-          if(this.checkData){
-              return;
-          }
           this.loading = true;
           this.verify = true;
       },
@@ -87,12 +76,12 @@ export default {
           let {donations} = this;
           let user = this.$session.get('user');
           let {user_id,facility_cd} = user;
-          this.$http.post(this,"typing/save",{
+          this.$http.post(this,"processing/save",{
               donations,user_id,facility_cd,verifier
           })
           .then(({data}) => {
               this.$store.state.msg = {
-                  content : 'Blood Typing has been saved successfully',
+                  content : 'Blood Processing has been saved successfully',
                   type : 'success'
               };
               this.$emit("cancel");

@@ -24,6 +24,30 @@ class Donor extends Model
         return $query->select( array_diff( $this->columns,(array) $value) );
     }
 
+    static function generateNo($facility_cd,$i = 1,$max = null){
+        if(!$max){
+            $max = Donor::select('donor_id')
+                    ->whereFacilityCd($facility_cd)
+                    ->where('donor_id','like',$facility_cd.'%')
+                    ->orderBy('donor_id','desc')->first()->donor_id;
+            if(!$max){
+                return $facility_cd.date('Y').str_pad('1',7,'0',STR_PAD_LEFT);
+            }
+        }
+
+        $num = substr($max,9,strlen($max));
+        $num = abs($num);
+        $num = $num+$i;
+        $new = $facility_cd.date('Y').str_pad($num,7,'0',STR_PAD_LEFT);
+        $isExists = Donor::whereDonorId($new)->first();
+        if($isExists){
+            $i++;
+            return self::generateNo($facility_cd,$i,$max);
+        }
+
+        return $new;
+    }
+
     static function replaceNye($val){
         $val = str_replace('??','',$val);
         $val = str_replace('Â','',$val);

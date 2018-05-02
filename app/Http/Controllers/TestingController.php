@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Donation;
+use App\TestResult;
+use App\TestResultDetail;
+use App\Exam;
+use App\Donor;
+use App\Component;
+use App\Http\Controllers\FlagReactiveController;
+
+class TestingController extends Controller
+{
+    function lists(Request $request){
+        $sched = $request->get('sched');
+        $sched_id = $sched['sched_id'];
+        $facility_cd = $request->get('facility_cd');
+        $donations = [];
+        if($sched_id == 'Walk-in'){
+            $from = $sched['from'];
+            $to = $sched['to'];
+            $donations = Donation::with('type','test')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',[$from,$to])->get();
+        }else{
+            $donations = Donation::with('type','test')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->get();
+        }
+
+        $response = [];
+        foreach($donations as $donation){
+            if(!$donation->blood_bag){
+
+            }else if(!$donation->test){
+                $response[] = $donation->donation_id;
+            }
+        }
+        return $response;
+    }
+
+    function save(Request $request){
+        $donations = $request->get('donations');
+        $user_id = $request->get('user_id');
+        $verifier = $request->get('verifier');
+        $facility_cd = $request->get('facility_cd');
+        $exams = Exam::whereDisableFlg('N')->pluck('exam_name','exam_cd');
+
+        foreach($donations as $d){
+            $bloodtest_no = TestResult::generateNo($facility_cd);
+            $t = new TestResult;
+            $t->facility_cd = $facility_cd;
+            $t->bloodtest_no = $bloodtest_no;
+            $t->bloodtest_dt = date('Y-m-d H:i:s');
+            $t->donation_id = $d['donation_id'];
+
+            $fail = 0;
+            foreach($exams as $exam_cd => $exam_name){
+                if($d[$exam_cd] == 'R'){
+                    $fail++;
+                }
+            }
+
+            $t->result = $fail ? 'R' : 'N';
+            $t->created_by = $user_id;
+            $t->created_dt = date('Y-m-d H:i:s');
+            $t->updated_by = $verifier['username'];
+
+            $t->save();
+
+            foreach($exams as $exam_cd => $exam_name){
+                $t2 = new TestResultDetail;
+                $t2->bloodtest_no = $bloodtest_no;
+                $t2->donation_id = $d['donation_id'];
+                $t2->exam_cd = $exam_cd;
+                $t2->result_int = $d[$exam_cd] == 'N' ? 'n' : 'r';
+                $t2->created_by = $user_id;
+                $t2->created_dt = date('Y-m-d H:i:s');
+                $t2->save();
+            }
+
+            if($fail){
+                FlagReactiveController::flagReactive($d['donation_id']);
+            }else{
+                FlagReactiveController::flagNonReactive($d['donation_id'],$facility_cd);
+            }
+
+        }
+    }
+}

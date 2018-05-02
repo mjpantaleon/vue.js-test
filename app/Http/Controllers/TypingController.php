@@ -16,7 +16,7 @@ class TypingController extends Controller
         if($sched_id == 'Walk-in'){
             $from = $sched['from'];
             $to = $sched['to'];
-            $donations = Donation::with('type','test')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',$from,$to)->get();
+            $donations = Donation::with('type','test')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',[$from,$to])->get();
         }else{
             $donations = Donation::with('type','test')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->get();
         }

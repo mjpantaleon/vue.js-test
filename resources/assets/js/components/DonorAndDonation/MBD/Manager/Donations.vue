@@ -11,7 +11,7 @@
                 <th style="width:30px;">
                     <input type="checkbox" v-model="selectAll">
                 </th>
-                <th style="width:30px;"></th>
+                <!-- <th style="width:30px;"></th> -->
                 <th style="width:30px;"></th>
                 <th>Donor Name</th>
                 <th>Gender</th>
@@ -23,16 +23,16 @@
         </thead>
         <tbody>
             <tr v-if="!donations.length && !loading">
-                <td colspan="9" class="text-center">No Donors Yet</td>
+                <td colspan="8" class="text-center">No Donors Yet</td>
             </tr>
             <tr v-if="loading">
-                <td colspan="9" class="text-center"><loadingInline label="Please wait, loading donors.."></loadingInline></td>
+                <td colspan="8" class="text-center"><loadingInline label="Please wait, loading donors.."></loadingInline></td>
             </tr>
             <tr v-if="donations && !loading" v-for="d in donations" :key="d.seqno" style="font-size:14px;">
                 <td>
                     <input type="checkbox" :value="d.seqno" v-model="selected" v-if="!d.donation_id">
                 </td>
-                <td><button class="btn btn-danger btn-xs" v-if="!d.processing" @click.prevent="confirmRemove(d.seqno)"><span class="glyphicon glyphicon-remove"></span></button></td>
+                <!-- <td><button class="btn btn-danger btn-xs" v-if="!d.processing" @click.prevent="confirmRemove(d.seqno)"><span class="glyphicon glyphicon-remove"></span></button></td> -->
                 <td><router-link :to="('/MBD/'+schedid+'/SearchDonor?donation_id='+d.donation_id)" class="btn btn-info btn-xs" v-if="!d.donor"><span class="glyphicon glyphicon-user"></span></router-link></td>
                 <td v-if="!d.donor" colspan="3"></td>
                 <td v-if="d.donor">{{d.donor.fname}} {{d.donor.mname}} {{d.donor.lname}}</td>

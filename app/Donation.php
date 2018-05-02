@@ -34,4 +34,8 @@ class Donation extends Model
     function mbd(){
         return $this->belongsTo('App\MBD','sched_id','sched_id');
     }
+
+    function units(){
+    return $this->hasMany('App\Blood','donation_id','donation_id');
+    }
 }

@@ -16,6 +16,7 @@ class HomeController extends Controller
         ->whereUserId($request->get('username'))
         ->wherePassword(md5($request->get('password')))
         ->first();
+
         $status = true;
         $error = null;
 

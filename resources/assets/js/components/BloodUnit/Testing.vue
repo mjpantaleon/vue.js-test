@@ -6,15 +6,14 @@
 </template>
 
 <script>
-import List from './Processing/List.vue';
-import Editing from './Processing/Editing.vue';
+import List from './Testing/List.vue';
+import Editing from './Testing/Editing.vue';
 
 export default {
     components : {List,Editing},
     data(){
         return {
-            selections : []
-            , editing : false, refresh : 0
+            selections : [], editing : false, refresh : 0
         }
     },
     methods : {

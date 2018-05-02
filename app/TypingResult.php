@@ -18,7 +18,7 @@ class TypingResult extends Model
                     ->where('bloodtyping_no','like',$facility_cd.'%')
                     ->orderBy('bloodtyping_no','desc')->first()->bloodtyping_no;
             if(!$max){
-                return $facility_cd.date('Y').str_pad('1',5,'0',STR_PAD_LEFT);
+                return $facility_cd.date('Y').str_pad('1',7,'0',STR_PAD_LEFT);
             }
         }
 

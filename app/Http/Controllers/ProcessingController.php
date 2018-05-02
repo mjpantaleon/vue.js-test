@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Donation;
 use App\Processing;
 use App\Blood;
+use App\Component;
+use App\TestResult;
 
 class ProcessingController extends Controller
 {
@@ -17,7 +19,7 @@ class ProcessingController extends Controller
         if($sched_id == 'Walk-in'){
             $from = $sched['from'];
             $to = $sched['to'];
-            $donations = Donation::with('processing','type','test','mbd')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',$from,$to)->get();
+            $donations = Donation::with('processing','type','test','mbd')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',[$from,$to])->get();
         }else{
             $donations = Donation::with('processing','type','test','mbd')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->get();
         }
@@ -27,7 +29,7 @@ class ProcessingController extends Controller
             if(!$donation->blood_bag){
 
             }else if(!$donation->test){
-                if(!$donation->type){
+                if(!$donation->processing){
                     $response[] = $donation;
                 }
             }else if($donation->test->result != 'R'){
@@ -56,16 +58,25 @@ class ProcessingController extends Controller
             $p->created_dt = date('Y-m-d H:i:s');
             $p->save();
 
-            foreach($d['units'] as $unit){
-                $c = new Blood;
-                $c->donation_id = $d['donation_id'];
-                $c->component_cd = $unit['component_cd'];
-                if($d['blood_type']){
-                    $c->blood_type = $d['blood_type'];
+            $test = TestResult::select('donation_id','result')->whereDonationId($d['donation_id'])->first();
+
+            foreach($d['units'] as $component_cd => $unit){
+                if($unit){
+                    $c = new Blood;
+                    $c->donation_id = $d['donation_id'];
+                    $c->component_cd = $component_cd;
+                    if($d['type']){
+                        $c->blood_type = $d['type']['blood_type'];
+                    }
+                    $c->location = $facility_cd;
+                    $collection_dt = $d['sched_id'] == 'Walk-in' ? $d['created_dt'] : $d['mbd']['donation_dt'];
+                    $c->expiration_dt = self::computeExpiration($component_cd,$collection_dt);
+                    $c->component_vol = $unit;
+                    $c->comp_stat = $test->result == 'R' ? 'REA' :'FBT';
+                    $c->created_by = $user_id;
+                    $c->created_dt = date('Y-m-d H:i:s');
+                    $c->save();
                 }
-                $c->location = $facility_cd;
-                $collection_dt = $d['sched_id'] == 'Walk-in' ? $d['created_dt'] : $d['mbd']['donation_dt'];
-                $c->expiration_dt = self::computeExpiration($d['component_cd'],$collection_dt);
             }
         }
     }
@@ -74,7 +85,7 @@ class ProcessingController extends Controller
 
     static function computeExpiration($component_cd,$collection_dt){
         if(!self::$components){
-            $components = Component::select('component_cd','comp_name','exp_interval','exp_interval_type')->whereDIsableFlg('N')->get();
+            $components = Component::select('component_cd','comp_name','exp_interval','exp_interval_type')->whereDisableFlg('N')->get();
             foreach($components as $c){
                 self::$components[$c->component_cd] = $c;
             }
@@ -92,6 +103,8 @@ class ProcessingController extends Controller
                 $interval = "DAY";
         }
 
-        return DB::statement("SELECT DATE_ADD('".$collection_dt."',INTERVAL ".self::$components[$component_cd]['exp_interval']." ".$interval.") as `expiration_dt`")->first()->expiration_dt;
+        $query = "SELECT DATE_ADD('".$collection_dt."',INTERVAL ".self::$components[$component_cd]['exp_interval']." ".$interval.") as `expiration_dt`";
+
+        return \DB::select(\DB::raw($query))[0]->expiration_dt;
     }
 }
