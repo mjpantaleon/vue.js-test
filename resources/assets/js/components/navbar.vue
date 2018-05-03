@@ -36,7 +36,7 @@
                 <li><router-link to="/Typing">Blood Typing</router-link></li>
                 <li><router-link to="/Processing">Blood Processing</router-link></li>
                 <li><router-link to="/Testing">Blood Testing</router-link></li>
-                <li><router-link to="/TTI">For Confirmatory Reactive Units</router-link></li>
+                <li><router-link to="/ForConfirmatory">For Confirmatory Reactive Units</router-link></li>
                 <li><router-link to="/Discard">Blood Discard</router-link></li>
                 <li><router-link to="/Label">Blood Label</router-link></li>
                 <li><router-link to="/Reprint">Label Reprint</router-link></li>

@@ -54,6 +54,10 @@ Route::middleware('client')->group(function(){
     Route::post('processing/save','ProcessingController@save');
     Route::post('testing/list','TestingController@lists');
     Route::post('testing/save','TestingController@save');
+    Route::post('forconfirmatory/list','TestingController@forconfirmatory');
+    Route::post('forconfirmatory/discard','TestingController@discard');
+    Route::post('discard/list','DiscardController@lists');
+    Route::post('discard/save','DiscardController@save');
 
 });
 
@@ -70,6 +74,7 @@ Route::middleware('client')->group(function(){
     Route::get('keyvalues/collectionmethods','KeyValueController@collectionmethods');
     Route::get('keyvalues/collectionstatuses','KeyValueController@collectionstatuses');
     Route::get('keyvalues/exams','KeyValueController@exams');
+    Route::get('keyvalues/discardreasons','KeyValueController@discardreasons');
 
     Route::get('dhq/questions','DHQController@questions');
 

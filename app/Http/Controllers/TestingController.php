@@ -9,6 +9,8 @@ use App\TestResultDetail;
 use App\Exam;
 use App\Donor;
 use App\Component;
+use App\Blood;
+use App\Discard;
 use App\Http\Controllers\FlagReactiveController;
 
 class TestingController extends Controller
@@ -83,6 +85,39 @@ class TestingController extends Controller
                 FlagReactiveController::flagNonReactive($d['donation_id'],$facility_cd);
             }
 
+        }
+    }
+
+    function forconfirmatory(Request $request){
+        $facility_cd = $request->get('facility_cd');
+        $units = Blood::whereLocation($facility_cd)->whereCompStat('QUA')->select('component_cd','donation_id')->get();
+
+        return $units;
+    }
+
+    function discard(Request $request){
+        $units = $request->get('units');
+        $verifier = $request->get('verifier');
+        $user_id = $request->get('user_id');
+        $facility_cd = $request->get('facility_cd');
+
+        foreach($units as $unit){
+            $exist = Discard::whereDonationId($unit['donation_id'])->whereComponentCd($unit['component_cd'])->first();
+            if(!$exist){
+                $d = new Discard;
+                $d->facility_cd = $facility_cd;
+                $d->discard_dt = date('Y-m-d H:i:s');
+                $d->discard_by = $user_id;
+                $d->reviewed_by = $verifier['username'];
+                $d->donation_id = $unit['donation_id'];
+                $d->component_cd = $unit['component_cd'];
+                $d->discard_reason = 'TTI';
+                $d->save();
+            }
+
+            $d = Blood::whereDonationId($unit['donation_id'])->whereComponentCd($unit['component_cd'])->first();
+            $d->comp_stat = 'DIS';
+            $d->save();
         }
     }
 }

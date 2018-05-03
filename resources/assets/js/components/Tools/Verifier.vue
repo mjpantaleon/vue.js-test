@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-lg-6 col-lg-offset-3" style="margin-top:50px;">
+        <div :class="full ? 'col-lg-12' : 'col-lg-6 col-lg-offset-3'" style="margin-top:50px;">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Confirmatory Verification Check</h3>
@@ -46,6 +46,7 @@
 <script>
 
 export default {
+  props : ['full'],
   data(){
       return { username : null, password : null, loading : false, error : null };
   },

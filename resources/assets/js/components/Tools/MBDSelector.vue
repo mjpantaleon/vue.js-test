@@ -93,8 +93,8 @@
                   </div>
               </div>
               <div class="modal-footer" v-if="!walkin">
-                <button class="btn btn-warning" v-if="walkin_dates" @click.prevent="walkin = true">Select Walk-in</button>
-                <button class="btn btn-warning" v-if="!walkin_dates" @click.prevent="$emit('selected',{sched_id : 'Walk-in', agency_cd : 'Walk-in',agency_name : 'Walk-in'})">Select Walk-in</button>
+                <button id="select_walkin" class="btn btn-warning" v-if="walkin_dates" @click.prevent="walkin = true">Select Walk-in</button>
+                <button id="select_walkin" class="btn btn-warning" v-if="!walkin_dates" @click.prevent="$emit('selected',{sched_id : 'Walk-in', agency_cd : 'Walk-in',agency_name : 'Walk-in'})">Select Walk-in</button>
               </div>
           </div>
       </div>
@@ -112,6 +112,11 @@ export default {
           agencies : [], mbds : [],
           walkin : false, walkin_dates : walkinDates, s_date : null, e_date : null
       }
+  },
+  mounted(){
+        $('#MBDSelector').on('shown.bs.modal', function () {
+            $('.abc:first').focus();
+        })
   },
   watch : {
       letter(){

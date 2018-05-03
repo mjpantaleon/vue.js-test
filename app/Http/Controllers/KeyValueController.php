@@ -60,6 +60,10 @@ class KeyValueController extends Controller
         return CodeValue::whereCode('DONATION_STAT')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
     }
 
+    function discardreasons(){
+        return CodeValue::whereCode('DISCARD')->whereDisableFlg('N')->pluck('code_val','codedtl_cd');
+    }
+
     function exams(){
         return Exam::whereDisableFlg('N')->pluck('exam_name','exam_cd');
     }

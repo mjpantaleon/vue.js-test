@@ -28,6 +28,8 @@ import RegisterUnit from './components/BloodUnit/RegisterUnit.vue';
 import Typing from './components/BloodUnit/Typing.vue';
 import Processing from './components/BloodUnit/Processing.vue';
 import Testing from './components/BloodUnit/Testing.vue';
+import ForConfirmatory from './components/BloodUnit/ForConfirmatory.vue';
+import Discard from './components/BloodUnit/Discard.vue';
 
 Vue.use(VueRouter);
 
@@ -63,5 +65,7 @@ export default new VueRouter({
         { path : '/Typing', component : Typing },
         { path : '/Processing', component : Processing },
         { path : '/Testing', component : Testing },
+        { path : '/ForConfirmatory', component : ForConfirmatory },
+        { path : '/Discard', component : Discard },
     ]
 })

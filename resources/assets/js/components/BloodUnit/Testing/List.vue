@@ -61,7 +61,6 @@ export default {
   props : ['updated'],
   data(){
       let {sched} = this.$store.state;
-      sched = {"sched_id":"1300620180000636","agency_cd":"1300601860","agency_name":"NVBSP-IMU","donation_dt":"2018-04-20 00:00:00"};
       return {
           sched, selected : [], donations : [], loading : false
       };

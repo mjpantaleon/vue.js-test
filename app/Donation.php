@@ -36,6 +36,10 @@ class Donation extends Model
     }
 
     function units(){
-    return $this->hasMany('App\Blood','donation_id','donation_id');
+        return $this->hasMany('App\Blood','donation_id','donation_id');
+    }
+
+    function discards(){
+        return $this->hasMany('App\Discard','donation_id','donation_id');
     }
 }
