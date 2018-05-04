@@ -72,7 +72,6 @@ export default {
             this.reasons = data;
             this.loading = false;
         });
-        $("#SelectDiscardReason").modal("show");
     },
   computed : {
       checkData(){
@@ -94,18 +93,20 @@ export default {
           this.verify = true;
       },
       submitForm(verifier){
+          $("#SelectDiscardReason").modal("hide");
           this.verify = false;
           this.loading = true;
           let {units,reason,remarks} = this;
+          let {user_id,facility_cd} = this.$session.get('user');
           this.$http.post(this,"discard/save",{
-              units,reason,remarks,verifier
+              units,reason,remarks,verifier,user_id,facility_cd
           })
           .then(({data}) => {
               this.$store.state.msg = {
                   content : 'Blood Units Discarded successfully',
                   type : 'success'
               };
-              this.$emit("done");
+              this.$emit("done",true);
           });
       }
   }

@@ -19,7 +19,7 @@ export default {
     methods : {
         setSelections(selected){
             this.selections = selected;
-            this.editing = true;
+            $("#SelectDiscardReason").modal("show");
         }
     }
 }

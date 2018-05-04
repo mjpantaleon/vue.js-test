@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Donation;
+use App\Blood;
+use App\Discard;
 
 class DiscardController extends Controller
 {
@@ -19,9 +21,9 @@ class DiscardController extends Controller
             if($sched_id == 'Walk-in'){
                 $from = $sched['from'];
                 $to = $sched['to'];
-                $donations = Donation::with('type','test','mbd','units')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',[$from,$to]);
+                $donations = Donation::with('type','test','mbd','units','discards')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',[$from,$to]);
             }else{
-                $donations = Donation::with('type','test','mbd','units')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id);
+                $donations = Donation::with('type','test','mbd','units','discards')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id);
             }
 
             if($donation_id){
@@ -29,7 +31,7 @@ class DiscardController extends Controller
             }
         }else{
             if($donation_id){
-                $donations = Donation::with('type','test','mbd','units')->whereFacilityCd($facility_cd)->whereDonationId($donation_id)->get();
+                $donations = Donation::with('type','test','mbd','units','discards')->whereFacilityCd($facility_cd)->whereDonationId($donation_id)->get();
             }
         }
 
@@ -80,5 +82,31 @@ class DiscardController extends Controller
         $reason = $request->get('reason');
         $remarks = $request->get('remarks');
         $verifier = $request->get('verifier');
+        $facility_cd = $request->get('facility_cd');
+        $user_id = $request->get('user_id');
+
+        foreach($units as $unit){
+            $exist = Discard::whereDonationId($unit['donation_id'])
+                        ->whereComponentCd($unit['component_cd'])
+                        ->first();
+            if(!$exist){
+                $discard = new Discard;
+                $discard->facility_cd = $facility_cd;
+                $discard->discard_dt = date('Y-m-d H:i:s');
+                $discard->discard_by = $user_id;
+                $discard->reviewed_by = $verifier['username'];
+                $discard->donation_id = $unit['donation_id'];
+                $discard->component_cd = $unit['component_cd'];
+                $discard->discard_reason = $reason;
+                $discard->remarks = $remarks;
+                $discard->save();
+            }
+
+            $unit = Blood::whereDonationId($unit['donation_id'])
+                    ->whereComponentCd($unit['component_cd'])
+                    ->first();
+            $unit->comp_stat = 'DIS';
+            $unit->save();
+        }
     }
 }

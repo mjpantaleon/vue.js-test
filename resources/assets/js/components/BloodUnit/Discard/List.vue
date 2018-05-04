@@ -85,7 +85,12 @@
                                 <!-- Label -->
                             </td>
                             <td v-for="(cn,cd) in components" :key="cd" class="text-center" @click=" hasUnit(d.units,cd) ? selectUnit(d.donation_id,cd) :null">
-                                <span v-if="hasUnit(d.units,cd)">{{fetchUnit(d.units,cd).comp_stat | comp_stat}}</span> <input v-if="hasUnit(d.units,cd)" type="checkbox" v-model="selected" :value="{donation_id : d.donation_id, component_cd : cd}">
+                                <div v-if="!isAlreadyDiscarded(d.discards,cd)">
+                                    <span v-if="hasUnit(d.units,cd)">{{fetchUnit(d.units,cd).comp_stat | comp_stat}}</span> <input v-if="hasUnit(d.units,cd)" type="checkbox" v-model="selected" :value="{donation_id : d.donation_id, component_cd : cd}">
+                                </div>
+                                <div v-if="isAlreadyDiscarded(d.discards,cd)">
+                                    <span class="glyphicon glyphicon-trash text-warning"></span>
+                                </div>
                             </td>
                         </tr>
                         <tr v-if="!loading && (sched.sched_id && donation_id && component_cd) && !donations">
@@ -106,10 +111,10 @@
 
 <script>
 export default {
-  props : ['updated'],
+  props : ['refresh'],
   data(){
       let {sched} = this.$store.state;
-      sched = {"sched_id":"1300620180000636","agency_cd":"1300601860","agency_name":"NVBSP-IMU","donation_dt":"2018-04-20 00:00:00"};
+    //   sched = {"sched_id":"1300620180000636","agency_cd":"1300601860","agency_name":"NVBSP-IMU","donation_dt":"2018-04-20 00:00:00"};
       let components = this.$session.get('components');
       let all_components = _.clone(components);
       return {
@@ -159,6 +164,9 @@ export default {
         //   console.log(_.filter(units,{component_cd : 10}));
           return _.filter(units,{component_cd : cd*1}).length > 0;
       },
+      isAlreadyDiscarded(discards,cd){
+          return _.filter(discards,{component_cd : cd}).length > 0;
+      },
       selectUnit(donation_id,component_cd){
           let criteria = {'donation_id' : donation_id, 'component_cd' : component_cd*1};
           let unit = _.find(this.selected,criteria);
@@ -179,10 +187,10 @@ export default {
       },
       refresh(){
         //   console.log("but why");
-          let {sched} = this.$store.state;
-          this.sched = sched;
-          this.donation_id = null;
-          this.component_cd = null;
+        //   let {sched} = this.$store.state;
+        //   this.sched = sched;
+        //   this.donation_id = null;
+        //   this.component_cd = null;
           this.selected = [];
           this.donations = [];
           this.loading = false;
