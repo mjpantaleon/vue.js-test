@@ -2,7 +2,7 @@
   <tr v-if="rules">
         <td>{{no}}</td>
         <td>{{donation.donation_id}}</td>
-        <td>{{donation.blood_type}}</td>
+        <td>{{donation.type ? donation.type.blood_type : ''}}</td>
         <td>{{bloodBags[donation.blood_bag]}}</td>
         <th v-for="(cn,cd) in components" :key="cd" width="100">
             <input type="number" class="form-control input-sm" @keyup="updateAllowedSet" v-model="donation.units[cd]" :disabled="!isAllowed(cd)" @focus="donation.units[cd] = null">

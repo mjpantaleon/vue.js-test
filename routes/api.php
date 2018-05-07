@@ -58,7 +58,10 @@ Route::middleware('client')->group(function(){
     Route::post('forconfirmatory/discard','TestingController@discard');
     Route::post('discard/list','DiscardController@lists');
     Route::post('discard/save','DiscardController@save');
-
+    Route::post('labeling/list','LabelController@lists');
+    
+    Route::get('admin/templates','TemplateController@lists');
+    Route::post('admin/savetemplate','TemplateController@save');
 });
 
 Route::middleware('client')->group(function(){
@@ -82,6 +85,8 @@ Route::middleware('client')->group(function(){
     Route::get('mbdselect/agencyMBDs/{agency_cd}','MBDController@agencyMBDs');
     
     Route::get('bloodbag/components','BagComponentController@lists');
+    
+    Route::get('admin/facility/listsimple','AdminController@facilitylistsimple');
     
 });
 

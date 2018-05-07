@@ -72,7 +72,11 @@ class ProcessingController extends Controller
                     $collection_dt = $d['sched_id'] == 'Walk-in' ? $d['created_dt'] : $d['mbd']['donation_dt'];
                     $c->expiration_dt = self::computeExpiration($component_cd,$collection_dt);
                     $c->component_vol = $unit;
-                    $c->comp_stat = $test->result == 'R' ? 'REA' :'FBT';
+                    if($test){
+                        $c->comp_stat = $test->result == 'R' ? 'REA' :'FBT';
+                    }else{
+                        $c->comp_stat = 'FBT';
+                    }
                     $c->created_by = $user_id;
                     $c->created_dt = date('Y-m-d H:i:s');
                     $c->save();

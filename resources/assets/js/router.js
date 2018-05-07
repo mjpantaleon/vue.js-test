@@ -30,6 +30,9 @@ import Processing from './components/BloodUnit/Processing.vue';
 import Testing from './components/BloodUnit/Testing.vue';
 import ForConfirmatory from './components/BloodUnit/ForConfirmatory.vue';
 import Discard from './components/BloodUnit/Discard.vue';
+import Labeling from './components/BloodUnit/Labeling.vue';
+
+import Templates from './components/Administration/Labels.vue';
 
 Vue.use(VueRouter);
 
@@ -67,5 +70,7 @@ export default new VueRouter({
         { path : '/Testing', component : Testing },
         { path : '/ForConfirmatory', component : ForConfirmatory },
         { path : '/Discard', component : Discard },
+        { path : '/Label', component : Labeling },
+        { path : '/Labels', component : Templates },
     ]
 })

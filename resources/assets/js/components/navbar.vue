@@ -75,7 +75,8 @@
                 Admistrations
                 <span class="caret"></span>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu" v-if="$session.get('user').ulevel == -1">
+                <li><router-link to="/Labels">Manage Labels</router-link></li>
               </ul>
 
             </li>

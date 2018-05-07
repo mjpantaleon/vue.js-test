@@ -21,9 +21,9 @@ class DiscardController extends Controller
             if($sched_id == 'Walk-in'){
                 $from = $sched['from'];
                 $to = $sched['to'];
-                $donations = Donation::with('type','test','mbd','units','discards')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',[$from,$to]);
+                $donations = Donation::with('type','test','mbd','units','discards','labels')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id)->whereBetween('created_dt',[$from,$to]);
             }else{
-                $donations = Donation::with('type','test','mbd','units','discards')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id);
+                $donations = Donation::with('type','test','mbd','units','discards','labels')->whereNotNull('donation_id')->whereFacilityCd($facility_cd)->whereSchedId($sched_id);
             }
 
             if($donation_id){

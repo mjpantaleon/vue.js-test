@@ -42,4 +42,8 @@ class Donation extends Model
     function discards(){
         return $this->hasMany('App\Discard','donation_id','donation_id');
     }
+
+    function labels(){
+        return $this->hasMany('App\Label','donation_id','donation_id');
+    }
 }

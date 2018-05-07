@@ -74,15 +74,20 @@
                             <td v-if="d.mbd" nowrap>{{d.mbd.agency_name}}</td>
                             <td v-if="d.mbd" nowrap>{{d.mbd.donation_dt.substr(0,10)}}</td>
                             <td>{{d.donation_id}}</td>
-                            <td>{{d.type ? d.type.blood_type : ''}}</td>
+                            <td class="text-center">
+                                <span v-if="d.type">{{d.type.blood_type}}</span>
+                                <span v-if="!d.type" class="text-danger">PENDING</span>
+                            </td>
                             <td class="text-center">
                                 <span v-if="d.test">
                                     <span class="text-success" v-if="d.test.result == 'N'">NR</span>
                                     <span class="text-danger" v-if="d.test.result == 'R'">R</span>
                                 </span>
+                                <span v-if="!d.test" class="text-danger">PENDING</span>
                             </td>
-                            <td>
-                                <!-- Label -->
+                            <td class="text-center">
+                                <span v-if="d.labels.length" class="text-success">LABELED</span>
+                                <span v-if="!d.labels.length" class="text-danger">PENDING</span>
                             </td>
                             <td v-for="(cn,cd) in components" :key="cd" class="text-center" @click=" hasUnit(d.units,cd) ? selectUnit(d.donation_id,cd) :null">
                                 <div v-if="!isAlreadyDiscarded(d.discards,cd)">
@@ -216,4 +221,8 @@ export default {
     font-size: 14px;
 }
 
+input[type='checkbox']{
+    width:15px;
+    height:15px;
+}
 </style>
