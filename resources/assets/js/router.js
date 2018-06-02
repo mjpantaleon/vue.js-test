@@ -34,6 +34,9 @@ import Labeling from './components/BloodUnit/Labeling.vue';
 
 import Templates from './components/Administration/Labels.vue';
 
+import Calculator from './components/Reports/Calculator';
+import MJ from './components/Reports/MJ';
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -72,5 +75,8 @@ export default new VueRouter({
         { path : '/Discard', component : Discard },
         { path : '/Label', component : Labeling },
         { path : '/Labels', component : Templates },
+        { path : '/Calculator', component : Calculator },
+        { path : '/MJ', component : MJ },
+        
     ]
 })
